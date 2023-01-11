@@ -1,4 +1,4 @@
-import {list} from './data.js'
+import {list_element,item_element,lists,items} from './data.js'
 import {initialize_list} from './initialize_list.js'
 
 function initialize_modal(){
@@ -23,14 +23,10 @@ button.addEventListener('click',(event) =>{
 function directly_add_list(){
         let plus_item_name = document.getElementById('item_plus_name').value
         console.log(plus_item_name)
-        const add_list = 
-            {
-                name : plus_item_name
-            }
-        
 
-        list.push(add_list);
-        initialize_list(list.length-1)
+        lists.pushData(new list_element(plus_item_name))
+
+        initialize_list(lists.ReturnLength()-1)
         document.getElementById('modal').style.display = "none"
     
 }

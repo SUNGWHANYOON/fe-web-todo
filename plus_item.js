@@ -1,3 +1,5 @@
+import {list_element,item_element,lists,items} from './data.js'
+
 let cond = false;
 let id = 0;
 
@@ -20,7 +22,7 @@ function make_button(){
 
     inputtext1.setAttribute('class','input_title')
     inputtext2.setAttribute('class','input_context')
-    
+
     unit.appendChild(inputtext1)
     unit.appendChild(inputtext2)
 
@@ -40,7 +42,7 @@ function make_button(){
 
     button1.setAttribute('id','plus_item_cancel');
     button2.setAttribute('id','plus_item_join');
-    
+
     button1.addEventListener('click',(event)=>{
         console.log('취소')
     })
@@ -84,5 +86,5 @@ window.onload = function(){
     item_plus.addEventListener('click',function(event){
         top_plus();
     });
-    
+
 }

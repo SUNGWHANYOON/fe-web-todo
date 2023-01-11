@@ -7,19 +7,16 @@ export let todos = [
         id: 1,
         title: 'Github 공부하기1',
         content: 'add, commit, push',
-        type: 'card',
       },
       {
         id: 2,
         title: 'Github 공부하기2',
         content: 'add, commit, push',
-        type: 'card',
       },
       {
         id: 3,
         title: 'Github 공부하기3',
         content: 'add, commit, push',
-        type: 'card',
       },
     ],
   },
@@ -36,7 +33,6 @@ export let todos = [
         id: 12,
         title: 'Github 공부하기1',
         content: 'add, commit, push',
-        type: 'card',
       },
     ],
   },
@@ -60,7 +56,7 @@ export const deleteSection = (id) => {
   todos = newTodos;
 };
 
-export const addTodo = (sectionId, { title, content, type }) => {
+export const addTodo = (sectionId, { title, content }) => {
   const newTodos = todos.map((section) => {
     if (section.id === sectionId) {
       return {
@@ -71,7 +67,6 @@ export const addTodo = (sectionId, { title, content, type }) => {
             id: Date.now(),
             title,
             content,
-            type,
           },
         ],
       };
@@ -90,18 +85,21 @@ export const deleteTodo = (todoId) => {
 };
 
 export const alterTodo = (todoId, { title, content }) => {
-  const newTodos = todos.map((section) =>
-    section.todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          id: todoId,
-          title,
-          content,
-        };
-      } else {
-        return todo;
-      }
-    })
-  );
+  const newTodos = todos.map((section) => {
+    return {
+      ...section,
+      todos: section.todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            id: todoId,
+            title,
+            content,
+          };
+        } else {
+          return todo;
+        }
+      }),
+    };
+  });
   todos = newTodos;
 };

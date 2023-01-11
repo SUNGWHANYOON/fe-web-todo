@@ -1,4 +1,10 @@
-import { addTodo, deleteSection, deleteTodo, todos } from '../store/todos.js';
+import {
+  addTodo,
+  deleteSection,
+  deleteTodo,
+  alterTodo,
+  todos,
+} from '../store/todos.js';
 import TodoCard from './TodoCard.js';
 
 export default class SectionList {
@@ -18,8 +24,6 @@ export default class SectionList {
   init() {
     const $main = document.createElement('main');
     this.$target.appendChild($main);
-
-    this.onClickHandler();
   }
 
   render() {
@@ -33,7 +37,7 @@ export default class SectionList {
             <header class="top-box" data-id="${id}">
               <div class="title">
                 <div class="text">${sectionName}</div>
-                <div class="notice-circle">0</div>
+                <div class="notice-circle">${todos.length}</div>
               </div>
               <div class="buttons">
                 <span class="button-add material-symbols-outlined"> add </span>
@@ -52,24 +56,21 @@ export default class SectionList {
       const $article = document.querySelector(`.left${id}`);
       this.renderTodoList($article, todos, this.onAlterTodo, this.onDeleteTodo);
     });
-  }
 
-  onHandleClassName(type) {
-    return type === 'card' ? 'hidden' : '';
+    this.onClickHandler();
   }
 
   renderTodoList($article, todos) {
-    console.log(this);
     todos.forEach(
       (todo) =>
         new TodoCard(
           $article,
           todo,
-          this.onAlterTodo,
+          this.onAlterTodo.bind(this),
           this.onDeleteTodo.bind(this)
         )
     );
-    // return `${todos
+
     //   .map(
     //     ({ id, title, content, type }) => `
     //     <form class="card" data-id="${id}">
@@ -107,15 +108,14 @@ export default class SectionList {
   }
 
   onClickHandler() {
-    this.$target.addEventListener('click', (e) => {
+    const $sectionHeader = this.$target.querySelector('.top-box');
+
+    $sectionHeader.addEventListener('click', (e) => {
       e.preventDefault();
       const { className } = e.target;
       const firstClassName = className.split(' ')[0];
 
-      const $section = e.target.closest(`.top-box`);
-      if (!$section) return;
-
-      const sectionId = $section.dataset.id;
+      const sectionId = $sectionHeader.dataset.id;
 
       switch (firstClassName) {
         case 'button-add':
@@ -129,18 +129,17 @@ export default class SectionList {
           deleteSection(parseInt(sectionId));
           break;
       }
-
       this.setState(todos);
     });
   }
 
   onAlterTodo(id, { title, content }) {
-    alterTodo(id, { title, content });
+    alterTodo(parseInt(id), { title, content });
     this.setState(todos);
   }
 
   onDeleteTodo(id) {
-    deleteTodo(id);
+    deleteTodo(parseInt(id));
     this.setState(todos);
   }
 }

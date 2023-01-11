@@ -21,8 +21,6 @@ export default class AddButton {
     const cancelBtn = document.querySelector('.modal-cancel');
     const deleteBtn = document.querySelector('.modal-delete');
 
-    console.log($button);
-
     $button.addEventListener('click', (e) => {
       e.preventDefault();
       console.log('dd');

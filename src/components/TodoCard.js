@@ -16,33 +16,40 @@ export default class TodoCard {
     this.state = nextState;
     this.$target.querySelector('[name=title]').value = this.state.title;
     this.$target.querySelector('[name=content]').value = this.state.content;
+
+    this.activeChangeHandler();
   }
 
   render() {
-    const { id, title, content, type } = this.state;
+    const { id, title, content } = this.state;
     this.$target.insertAdjacentHTML(
       'afterbegin',
       `
-      <form class="card ${type === 'form' && 'form-active'}" data-id="${id}">
+      <form class="card card${id}" data-id="${id}">
         <div class="content">
-          <textarea             
+          <textarea       
+            disabled 
             placeholder="제목을 입력하세요"
             class="big-text"
+            name="title"
             rows="1"
             >${title}</textarea>
           <textarea
+            disabled 
             placeholder="내용을 입력하세요"
             class="middle-text"
+            name="content"
           >${content}</textarea>
-          <div class="small-text ${
-            type === 'card' ? '' : 'hidden'
-          }">author by web</div>
-          <div class="card-buttons ${type === 'card' ? 'hidden' : ''}">
-          <button class="cancel cancel-disabled">취소</button>
-          <button class="enroll enroll-disabled">등록</button>
+          <div class="small-text">author by web</div>
+          <div class="card-buttons hidden">
+            <button class="cancel">취소</button>
+            <button disabled class="enroll">등록</button>
+          </div>
         </div>
-        </div>
-        <div class="button ${type === 'card' ? '' : 'hidden'}" >
+        <div class="button">
+          <span class="card-button-edit material-symbols-outlined">
+            edit
+          </span>
           <span class="card-button-delete material-symbols-outlined">
             close
           </span>
@@ -51,12 +58,15 @@ export default class TodoCard {
     `
     );
 
-    this.onChangeHandler();
-    this.onClickHandler();
+    const $form = document.querySelector(`.card${id}`);
+
+    this.onChangeHandler($form);
+    this.onClickHandler($form);
   }
 
-  onChangeHandler() {
-    this.$target.addEventListener('keyup', (e) => {
+  onChangeHandler(element) {
+    const $form = element;
+    $form.addEventListener('keyup', (e) => {
       const { target } = e;
       const name = target.getAttribute('name');
 
@@ -70,19 +80,22 @@ export default class TodoCard {
     });
   }
 
-  onClickHandler() {
-    this.$target.addEventListener('click', (e) => {
+  onClickHandler(element) {
+    const $form = element;
+    $form.addEventListener('click', (e) => {
       e.preventDefault();
       const { className } = e.target;
       const firstClassName = className.split(' ')[0];
 
       const $card = e.target.closest(`.card`);
-
       if (!$card) return;
 
-      const cardId = e.target.closest(`.card`).dataset.id;
+      const cardId = $card.dataset.id;
       if (firstClassName === 'enroll') {
         this.onSubmit(cardId, this.state);
+        this.onToggleClassName($form);
+      } else if (firstClassName === 'card-button-edit') {
+        this.onToggleClassName($form);
       } else if (
         firstClassName === 'card-button-delete' ||
         firstClassName === 'cancel'
@@ -90,5 +103,33 @@ export default class TodoCard {
         this.onDelete(cardId);
       }
     });
+  }
+
+  activeChangeHandler() {
+    const $enrollBtn = document.querySelector('.enroll');
+
+    if (this.state.title.length > 0) {
+      $enrollBtn.classList.add('enroll-active');
+      $enrollBtn.disabled = false;
+    } else {
+      $enrollBtn.classList.remove('enroll-active');
+      $enrollBtn.disabled = true;
+    }
+  }
+
+  onToggleClassName(element) {
+    const $form = element;
+    const $textareas = $form.querySelectorAll('textarea');
+    const $smallText = $form.querySelector('.small-text');
+    const $cardBtns = $form.querySelector('.card-buttons');
+    const $deleteBtn = $form.querySelector('.button');
+
+    console.log($deleteBtn);
+
+    $textareas.forEach((textarea) => (textarea.disabled = !textarea.disabled));
+    $form.classList.toggle('form-active');
+    $smallText.classList.toggle('hidden');
+    $cardBtns.classList.toggle('hidden');
+    $deleteBtn.classList.toggle('hidden');
   }
 }

@@ -2,14 +2,7 @@ import Modal from './components/Modal.js';
 import AddButton from './components/AddButton.js';
 import Header from './components/Header.js';
 import SectionList from './components/SectionList.js';
-import {
-  todos,
-  addSection,
-  addTodo,
-  deleteSection,
-  alterTodo,
-  deleteTodo,
-} from './store/todos.js';
+import { todos } from './store/todos.js';
 
 export default function App({ $target }) {
   new Header({ $target, title: 'TO-DO LIST' });

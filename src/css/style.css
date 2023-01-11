@@ -5,6 +5,9 @@ body {
   height: 100vh;
   overflow-x: hidden;
 }
+.hidden {
+  display: none !important;
+}
 
 body > header {
   height: 112px;
@@ -130,7 +133,7 @@ article > .card {
   justify-content: space-between;
 }
 
-article > .card-form {
+article > .form-active {
   border: 1px solid #0075de;
   /* animation: appear 0.3s ease-in-out; */
 }
@@ -160,13 +163,25 @@ article > .drag {
 }
 
 .big-text {
+  outline: none;
+  resize: none;
   font-size: 16px;
   font-weight: 700;
+  border: none;
+  overflow: hidden;
+  background-color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .middle-text {
+  outline: none;
+  resize: none;
+  overflow: hidden;
   font-size: 14px;
   color: #010101;
+  background-color: #fff;
+  border: none;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .small-text {
@@ -218,15 +233,17 @@ input:disabled {
 }
 
 .card-buttons .enroll {
+  background: #86c6ff;
+  color: rgba(255, 255, 255, 0.4);
+}
+.card-buttons .enroll-active {
   background: #0075de;
   color: #fff;
   cursor: pointer;
 }
-.card-buttons .enroll-disabled {
-  background: #86c6ff;
-  color: rgba(255, 255, 255, 0.4);
+.card-buttons .cancel-disabled {
+  cursor: default;
 }
-
 .text-disabled {
   color: #828282;
 }

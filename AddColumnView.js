@@ -1,5 +1,5 @@
-import {list_element,item_element,lists,items} from './data.js'
-import {initialize_list} from './initialize_list.js'
+import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
+import {initialize_list} from './ColumnView.js'
 
 function initialize_modal(){
     let modal_input_location = document.getElementById('main');
@@ -20,13 +20,15 @@ button.addEventListener('click',(event) =>{
 
 });
 
-function directly_add_list(){
+function addColumn(){
         let plus_item_name = document.getElementById('item_plus_name').value
-        console.log(plus_item_name)
 
-        lists.pushData(new list_element(plus_item_name))
+        columnArray.pushColumn(new columnElement(plus_item_name))
 
-        initialize_list(lists.ReturnLength()-1)
+        initialize_list(columnArray.returnLength()-1)
+
+        let item_plus = document.getElementsByClassName("button_plus");
+        
         document.getElementById('modal').style.display = "none"
     
 }
@@ -39,7 +41,7 @@ function onload_function(){
 
     let modal_plus = document.getElementById('modal_plus');
     
-    modal_plus.addEventListener('click',directly_add_list)
+    modal_plus.addEventListener('click',addColumn)
 }
 
 export {initialize_modal}

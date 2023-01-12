@@ -1,6 +1,5 @@
-import {initialize_list} from './ColumnView.js'
 import {initialize_item} from './CardView.js'
-import {initialize_modal} from './AddColumnView.js'
+import {initialize_modal, initialize_list} from './ColumnView.js'
 
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 

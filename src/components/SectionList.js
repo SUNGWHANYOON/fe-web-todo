@@ -5,12 +5,16 @@ import {
   alterTodo,
   todos,
 } from '../store/todos.js';
+import Modal from './Modal.js';
 import TodoCard from './TodoCard.js';
 
 export default class SectionList {
-  constructor({ $target, initialState }) {
+  constructor({ $target, initialState, onHandleModal }) {
     this.$target = $target;
     this.state = initialState;
+    this.onHandleModal = (callback) => {
+      onHandleModal(callback);
+    };
 
     this.init();
     this.render();
@@ -108,28 +112,32 @@ export default class SectionList {
   }
 
   onClickHandler() {
-    const $sectionHeader = this.$target.querySelector('.top-box');
+    const $sectionHeaderArr = this.$target.querySelectorAll('.top-box');
 
-    $sectionHeader.addEventListener('click', (e) => {
-      e.preventDefault();
-      const { className } = e.target;
-      const firstClassName = className.split(' ')[0];
+    $sectionHeaderArr.forEach(($sectionHeader) => {
+      $sectionHeader.addEventListener('click', (e) => {
+        const $a = e.target.closest('.section');
+        e.preventDefault();
+        const { className } = e.target;
+        const firstClassName = className.split(' ')[0];
+        console.log('클릭!');
 
-      const sectionId = $sectionHeader.dataset.id;
+        const sectionId = $sectionHeader.dataset.id;
 
-      switch (firstClassName) {
-        case 'button-add':
-          addTodo(parseInt(sectionId), {
-            title: '',
-            content: '',
-            type: 'form',
-          });
-          break;
-        case 'button-delete':
-          deleteSection(parseInt(sectionId));
-          break;
-      }
-      this.setState(todos);
+        switch (firstClassName) {
+          case 'button-add':
+            addTodo(parseInt(sectionId), {
+              title: '',
+              content: '',
+              type: 'new',
+            });
+            break;
+          case 'button-delete':
+            deleteSection(parseInt(sectionId));
+            break;
+        }
+        this.setState(todos);
+      });
     });
   }
 
@@ -139,7 +147,9 @@ export default class SectionList {
   }
 
   onDeleteTodo(id) {
-    deleteTodo(parseInt(id));
-    this.setState(todos);
+    this.onHandleModal(() => {
+      deleteTodo(parseInt(id));
+      this.setState(todos);
+    });
   }
 }

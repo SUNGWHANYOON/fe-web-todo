@@ -7,12 +7,20 @@ import { todos } from './store/todos.js';
 export default function App({ $target }) {
   new Header({ $target, title: 'TO-DO LIST' });
 
+  const modal = new Modal($target, 'prompt');
+
   new SectionList({
     $target,
     initialState: todos,
+    onHandleModal: (callback) => {
+      modal.setOnClick(callback);
+    },
   });
 
-  new Modal($target, 'form');
-
-  new AddButton($target);
+  new AddButton({
+    $target,
+    onHandleModal: (callback) => {
+      modal.setOnClick(callback);
+    },
+  });
 }

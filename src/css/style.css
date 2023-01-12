@@ -131,6 +131,7 @@ article > .card {
   padding: 16px;
   display: flex;
   justify-content: space-between;
+  height: fit-content;
 }
 
 article > .form-active {
@@ -169,17 +170,18 @@ article > .drag {
   font-weight: 700;
   border: none;
   overflow: hidden;
-  background-color: #fff;
+  background-color: inherit;
   font-family: 'Noto Sans KR', sans-serif;
 }
 
 .middle-text {
+  height: auto;
   outline: none;
   resize: none;
-  overflow: hidden;
   font-size: 14px;
+  overflow: hidden;
   color: #010101;
-  background-color: #fff;
+  background-color: inherit;
   border: none;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -199,6 +201,9 @@ article > .drag {
   color: #828282;
   font-size: 18px;
   cursor: pointer;
+}
+.button > .card-button-edit:hover {
+  color: #0075de;
 }
 
 .button > .card-button-delete:hover {
@@ -259,9 +264,8 @@ input:disabled {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
   display: none;
+  align-items: center;
 }
 .block {
   display: flex;
@@ -280,6 +284,9 @@ input:disabled {
   display: flex;
   gap: 15px;
   margin-top: 20px;
+}
+
+.modal-delete {
 }
 
 .plus-button {

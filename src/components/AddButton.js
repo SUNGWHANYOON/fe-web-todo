@@ -1,6 +1,9 @@
 export default class AddButton {
-  constructor($target) {
+  constructor({ $target, onHandleModal }) {
     this.$target = $target;
+    this.onHandleModal = () => {
+      onHandleModal();
+    };
     this.render();
   }
 
@@ -17,19 +20,10 @@ export default class AddButton {
 
   onClickHandler() {
     const $button = this.$target.querySelector('.plus-button');
-    const $modal = document.querySelector('.modal-background');
-    const cancelBtn = document.querySelector('.modal-cancel');
-    const deleteBtn = document.querySelector('.modal-delete');
 
     $button.addEventListener('click', (e) => {
       e.preventDefault();
-      console.log('dd');
-      $modal.classList.add('block');
-    });
-
-    cancelBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      $modal.classList.remove('block');
+      this.onHandleModal(() => {});
     });
   }
 }

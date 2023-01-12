@@ -67,6 +67,7 @@ export const addTodo = (sectionId, { title, content }) => {
             id: Date.now(),
             title,
             content,
+            type: 'new',
           },
         ],
       };
@@ -81,6 +82,7 @@ export const deleteTodo = (todoId) => {
     return { ...section, todos: newTasks };
   });
   todos = newTodos;
+  console.log(todos);
   return todos;
 };
 

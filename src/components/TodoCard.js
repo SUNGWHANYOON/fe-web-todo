@@ -1,6 +1,7 @@
 export default class TodoCard {
   constructor($target, initialState, onSubmit, onDeleteTodo) {
     this.$target = $target;
+    this.initialState = initialState;
     this.state = initialState;
     this.onSubmit = (id, { title, content }) => {
       onSubmit(id, { title, content });
@@ -14,14 +15,16 @@ export default class TodoCard {
 
   setState(nextState) {
     this.state = nextState;
-    this.$target.querySelector('[name=title]').value = this.state.title;
-    this.$target.querySelector('[name=content]').value = this.state.content;
+    const $card = this.$target.querySelector(`.card${this.state.id}`);
 
-    this.activeChangeHandler();
+    $card.querySelector('[name=title]').value = this.state.title;
+    $card.querySelector('[name=content]').value = this.state.content;
+
+    this.activeChangeHandler($card);
   }
 
   render() {
-    const { id, title, content } = this.state;
+    const { id, title, content, type } = this.state;
     this.$target.insertAdjacentHTML(
       'afterbegin',
       `
@@ -38,6 +41,7 @@ export default class TodoCard {
             disabled 
             placeholder="내용을 입력하세요"
             class="middle-text"
+            rows="1"
             name="content"
           >${content}</textarea>
           <div class="small-text">author by web</div>
@@ -59,14 +63,19 @@ export default class TodoCard {
     );
 
     const $form = document.querySelector(`.card${id}`);
+    if (type === 'new') this.onToggleClassName($form);
 
+    this.onhandleResizeHeight($form);
     this.onChangeHandler($form);
-    this.onClickHandler($form);
+    this.onClickHandler($form, type);
+    this.onHoverHandler($form);
   }
 
   onChangeHandler(element) {
     const $form = element;
+
     $form.addEventListener('keyup', (e) => {
+      this.onhandleResizeHeight($form);
       const { target } = e;
       const name = target.getAttribute('name');
 
@@ -80,7 +89,7 @@ export default class TodoCard {
     });
   }
 
-  onClickHandler(element) {
+  onClickHandler(element, type) {
     const $form = element;
     $form.addEventListener('click', (e) => {
       e.preventDefault();
@@ -93,20 +102,40 @@ export default class TodoCard {
       const cardId = $card.dataset.id;
       if (firstClassName === 'enroll') {
         this.onSubmit(cardId, this.state);
-        this.onToggleClassName($form);
       } else if (firstClassName === 'card-button-edit') {
         this.onToggleClassName($form);
-      } else if (
-        firstClassName === 'card-button-delete' ||
-        firstClassName === 'cancel'
-      ) {
+      } else if (firstClassName === 'card-button-delete') {
         this.onDelete(cardId);
+      } else if (firstClassName === 'cancel') {
+        if (type === 'new') this.onDelete(cardId);
+        else {
+          this.setState(this.initialState);
+          this.onToggleClassName($form);
+        }
       }
     });
   }
 
-  activeChangeHandler() {
-    const $enrollBtn = document.querySelector('.enroll');
+  onHoverHandler(element) {
+    const $form = element;
+    const cardDeleteBtn = $form.querySelector('.card-button-delete');
+
+    cardDeleteBtn.addEventListener('mouseover', (e) => {
+      e.preventDefault();
+      const $card = e.target.closest('.card');
+      $card.classList.add('card-deletable');
+    });
+
+    cardDeleteBtn.addEventListener('mouseout', (e) => {
+      e.preventDefault();
+      const $card = e.target.closest('.card');
+      $card.classList.remove('card-deletable');
+    });
+  }
+
+  activeChangeHandler(element) {
+    const $card = element;
+    const $enrollBtn = $card.querySelector('.enroll');
 
     if (this.state.title.length > 0) {
       $enrollBtn.classList.add('enroll-active');
@@ -123,13 +152,18 @@ export default class TodoCard {
     const $smallText = $form.querySelector('.small-text');
     const $cardBtns = $form.querySelector('.card-buttons');
     const $deleteBtn = $form.querySelector('.button');
-
-    console.log($deleteBtn);
-
     $textareas.forEach((textarea) => (textarea.disabled = !textarea.disabled));
     $form.classList.toggle('form-active');
     $smallText.classList.toggle('hidden');
     $cardBtns.classList.toggle('hidden');
     $deleteBtn.classList.toggle('hidden');
+    this.activeChangeHandler($form);
   }
+
+  onhandleResizeHeight = (element) => {
+    const $form = element;
+    const contentTextarea = $form.querySelector('[name=content]');
+    contentTextarea.style.height = 'auto';
+    contentTextarea.style.height = contentTextarea.scrollHeight + 'px';
+  };
 }

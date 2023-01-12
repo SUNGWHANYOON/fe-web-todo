@@ -1,6 +1,9 @@
 *{
     border : none;
 }
+textarea{
+    resize : none;
+}
 #Title{
     font-size : 2.5em;
     padding-left : 8px;
@@ -40,6 +43,12 @@ TodoItem{
     flex-wrap : wrap;
     justify-content : space-between;
 }
+.button_x_column::after{
+    content: "\00d7";
+}
+.button_x_card::after{
+    content: "\00d7";
+}
 ul{
     display :flex;
     flex-direction : column;
@@ -48,7 +57,6 @@ ul{
     border-color : white;
     background-color : white;
     padding-left : 10px;
-
 }
 .author_by_web{
     font-size : 5px;
@@ -87,11 +95,11 @@ li{
 
 }
 .circle_side_plus{
-    right : 62px;
-    bottom :47.5px;
+    right : 65px;
+    bottom : 44px;
     position : absolute;
     color:white;
-    font-size : 80px;
+    font-size : 75px;
 
 }
 button{
@@ -100,6 +108,7 @@ button{
     border : none;
     font-size : 25px;
     color : gray;
+    cursor : pointer;
 }
 .plus_todo{
     display : flex;
@@ -230,7 +239,7 @@ input[id="icon"] + label > span:nth-child(3) {
     justify-content : space-between;
 
 }
-.initialize_item_here{
+.addCard_here{
     padding-right : 15px;
 }
 #modal_plus{
@@ -260,5 +269,56 @@ input[id="icon"] + label > span:nth-child(3) {
     border: solid 2px #1E90FF;
     border-radius: 5px;
     font-size: 16px;
-    resize: both;
+    resize: none;
+}
+.card_modal_background {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    height: 100%;
+    width: 100%;
+}
+.card_modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width:200px;
+    height : 100px;
+    padding: 20px;
+}
+.card_delete_modal_content{
+    display : flex;
+    flex-direction: column;
+
+}
+.card_modal_button{
+    display : flex;
+    flex-direction: row;
+    justify-content : space-between;
+
+}
+.card_delete{
+    background-color: gray;
+    margin : 10px;
+    width : 50%;
+    height : 100%;
+    border : none;
+    border-radius : 10px;
+    font-size : 20px;
+    color : white;
+}
+.card_keep{
+    background-color: skyblue;
+    margin : 10px;
+    width : 50%;
+    height : 100%;
+    border : none;
+    border-radius : 10px;
+    font-size : 20px;
+    color : white;
 }

@@ -3,15 +3,10 @@
     <head>
     <meta charset = "UTF-8">
     <link rel = "stylesheet" href = "./public/css/style.css" type="text/css"/>
-    <style>
-        #button_x::after{
-            content: "\00d7";
-        }
-    </style>
     <script type = "module" src = './dataStorage.js'></script>
     <script type = "module" src = './initialize.js'></script>
     </head>
-    <button style="cursor:pointer" id = "plus_list">
+    <button id = "plus_list">
         <div class = "circle_side" ></div>
         <div class = "circle_side_plus">+</div>
     </button>
@@ -44,16 +39,16 @@
                 </div>
                 <div class="flex_row">
                     <button class = "button_plus">+</button>
-                    <button id = "button_x"></button>
+                    <button class = "button_x_column"></button>
                 </div>
             </div>
          </template>
 
          <template class="template_item">
-            <ul>
+            <ul id = "card">
                 <div class="flex_between">
                     <TodoItem class = "item_name"></TodoItem>
-                    <button id = "button_x"></button>
+                    <button class = "button_x_card"></button>
                 </div>
                 <textarea class = "item_tag"></textarea>
                 <div class = "author_by_web">author by web</div>
@@ -67,10 +62,30 @@
                     <textarea id = "item_plus_name"></textarea>
                 </div>
                 <div class = "modal_button">
-                    <button style = "cursor:pointer" id="modal_plus">추가</button>
-                    <button style = "cursor:pointer" id="modal_close">취소</button>
+                    <button id="modal_plus">추가</button>
+                    <button id="modal_close">취소</button>
                 </div>
                 </div>
+            </div>
+        </template>
+
+        <template class="card_delete_modal">
+            <div class = "card_modal_background">
+                <div class = "card_modal">
+                    <div class="card_delete_modal_content">
+                        <p>선택한 카드를 삭제할까요?</p>
+                    </div>
+                    <div class = "card_modal_button">
+                        <button class="card_keep">취소</button>
+                        <button class="card_delete">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template class = "animated_layer">
+            <div class = "layer">
+                
             </div>
         </template>
     </body>

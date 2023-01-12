@@ -1,5 +1,5 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
-import {initialize_item, AddCard} from './CardView.js'
+import {addCard, makeCardDom} from './CardView.js'
 
 function initialize_list(i){
 
@@ -10,7 +10,7 @@ function initialize_list(i){
     let input_name = columnArray.getColumn()[i].name;
     let input_thing = document.importNode(templates.content,true);
     node.appendChild(input_thing);
-    node.setAttribute('class',"initialize_item_here");
+    node.setAttribute('class',"addCard_here");
 
     let cardLayout = document.createElement('div');
     cardLayout.setAttribute('class','cardLayout');
@@ -59,10 +59,9 @@ function addColumn(){
         initialize_list(input_card_index)
         let item_plus = document.getElementsByClassName("button_plus")[input_card_index];
         item_plus.addEventListener('click',function(event){
-                AddCard(input_card_index);
+                makeCardDom(input_card_index);
         });
         document.getElementById('modal').style.display = "none"
-
 
     }
     

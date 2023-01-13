@@ -1,5 +1,6 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 import {addCard, makeCardDom} from './CardView.js'
+import {innerCircleCount} from './utils/utils.js'
 
 function initialize_list(i){
 
@@ -16,20 +17,16 @@ function initialize_list(i){
     cardLayout.setAttribute('class','cardLayout');
     node.appendChild(cardLayout);
 
+    let columnNameLocation = node.getElementsByClassName('list_name')[0]
+    changeColumnNameEventHandler(columnNameLocation,i,input_name)
     initialize_location.appendChild(node);
 
     document.getElementsByClassName('list_name')[i].innerHTML = input_name;
-    let count = 0;
-    let j;
-    for(j = 0; j < cardArray.returnLength(); j++){
-        if(cardArray.getcard()[j].status == input_name)
-        {
-            count++;
-        }
-    }
-    document.getElementsByClassName('circle')[i].innerHTML = count;
+
+    innerCircleCount(i)
 
 }
+
 
 function initialize_modal(){
     let modal_input_location = document.getElementById('main');
@@ -62,7 +59,6 @@ function addColumn(){
                 makeCardDom(input_card_index);
         });
         document.getElementById('modal').style.display = "none"
-
     }
     
 
@@ -76,6 +72,14 @@ function onload_function(){
     let modal_plus = document.getElementById('modal_plus');
     
     modal_plus.addEventListener('click',addColumn)
+}
+
+function changeColumnNameEventHandler(columnNameLocation,i,input_name){
+    columnNameLocation.addEventListener('dblclick',function(event){
+        if(columnNameLocation.value != input_name){
+            columnArray.arr[i].setName(columnNameLocation.value)
+        }
+    })
 }
 
 export {initialize_modal, initialize_list}

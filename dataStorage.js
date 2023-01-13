@@ -1,20 +1,17 @@
 let columnElement = function(name){
     this.name = name || "blank";
 }
-
 columnElement.prototype.getName = function(){
     return this.name;
 }
 columnElement.prototype.setName = function(name){
     this.name = name;
 }
-
 //column 정의, column 배열을 담고있고 각종 메소드가 있음.
 
 let columnStorage = function(){
     this.arr = []
 }
-
 columnStorage.prototype.pushColumn = function(columnElement){
     this.arr.push(columnElement)
 }
@@ -98,9 +95,9 @@ let cardArray = new cardStorage();
 
     // 실제 카드 추가부분
 
-    let card_unit3 = new cardElement("HTML/CSS 공부하기","input 태그 실습",now_date,"하고있는 일")
-    let card_unit2 = new cardElement("블로그에 포스팅할 것","GitHub 공부내용",now_date,"하고있는 일")
-    let card_unit1 = new cardElement("Github공부하기","add,commit,push",now_date,"해야할 일")
+    let card_unit3 = new cardElement("HTML/CSS 공부하기","input 태그 실습",now_date,0)
+    let card_unit2 = new cardElement("블로그에 포스팅할 것","GitHub 공부내용",now_date,0)
+    let card_unit1 = new cardElement("Github공부하기","add,commit,push",now_date,1)
 
     cardArray.pushcard(card_unit1)
     cardArray.pushcard(card_unit2)

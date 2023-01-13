@@ -1,4 +1,5 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
+import {innerCircleCount} from './utils/utils.js'
 
 HTMLCollection.prototype.forEach = Array.prototype.forEach
 
@@ -8,16 +9,9 @@ let putarea = document.getElementsByName('todo_thing');
 function addCard(i){
     let input_item = cardArray.getcard()[i] // item_element
     let initialize_location = document.getElementsByClassName('cardLayout'); //list 배열
-    let initialize_location_name = document.getElementsByClassName('list_name');
-    let k;
 
-    let current_item_id; //list 배열의 번호
-    for(k = 0; k < initialize_location.length; k++){
+    let current_item_id = input_item.status; //list 배열의 번호
 
-        if(initialize_location_name[k].innerHTML == input_item.status){
-            current_item_id = k;
-        }
-    }
     let node = document.createElement('div');
 
     let templates = document.getElementsByClassName('template_item')[0];
@@ -47,7 +41,8 @@ function addCard(i){
         currentCard.getElementsByClassName('card_modal_background')[0].style.display = '';
     })
 
-    initCardDelteModal(currentCard)
+    initCardDeleteModal(currentCard,current_item_id)
+    innerCircleCount(current_item_id)
 
 }
 
@@ -126,8 +121,7 @@ window.onload = function(){
 
 function makeCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
     const current_date = new Date()
-    let nowColumnName = columnArray.getColumn()[i].name
-    let makeCardDomObject = new cardElement(inputtext1.value,inputtext2.value,current_date,nowColumnName)
+    let makeCardDomObject = new cardElement(inputtext1.value,inputtext2.value,current_date,i)
     cardArray.pushcard(makeCardDomObject);
 
     addCard(cardArray.getcard().length-1)
@@ -135,7 +129,7 @@ function makeCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
     buttonContainer.remove();
 }
 
-function initCardDelteModal(currentCard){
+function initCardDeleteModal(currentCard,current_item_id){
     let cardModalInputLocation = currentCard;
     let cardModalTemplates = document.getElementsByClassName('card_delete_modal')[0];
     let cardInputModal = document.importNode(cardModalTemplates.content,true);
@@ -147,13 +141,25 @@ function initCardDelteModal(currentCard){
     let cardDeleteButtonCancel = cardModalItself.getElementsByClassName('card_keep')[0];
     let cardDeleteButton = cardModalItself.getElementsByClassName('card_delete')[0]
     
-    cardDeleteButton.addEventListener('click',function(){cardDeleteButtonEventListener(cardModalItself,currentCard)})
+    cardDeleteButton.addEventListener('click',function(){cardDeleteButtonEventListener(cardModalItself,currentCard,current_item_id)})
     cardDeleteButtonCancel.addEventListener('click',function(){cardDeleteButtonCancelEventListener(cardModalItself)})
 
 }
 
-function cardDeleteButtonEventListener(cardModalItself,currentCard){
+function cardDeleteButtonEventListener(cardModalItself,currentCard,current_item_status){
     cardModalItself.style.display = "none";
+    let name = currentCard.getElementsByClassName('item_name')[0].innerHTML;
+
+    let idx= -1;
+    cardArray.arr.forEach(element=>{
+        idx++;
+        if(name == element.name)
+            {
+                cardArray.deletecard(idx)
+                return false;
+            }
+    })
+    innerCircleCount(current_item_status)
     currentCard.remove();
 }
 
@@ -161,4 +167,4 @@ function cardDeleteButtonCancelEventListener(cardModalItself){
     cardModalItself.style.display = "none";
 }
 
-export {addCard,makeCardDom,initCardDelteModal}
+export {addCard,makeCardDom,initCardDeleteModal}

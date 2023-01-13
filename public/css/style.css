@@ -15,11 +15,14 @@ textarea{
     justify-content : space-between;
 
 }
-TodoList{
+.list_name{
     display : inline-block;
-    font-size : 1.2em;
+    font-size : 15px;
     margin-right : 0;
     font-weight : bold;
+    background-color : rgb(245,245,245);
+    width : 80px;
+    
 }
 TodoItem{
     display: block;
@@ -180,34 +183,6 @@ body{
     height:5000px;
 }
 
-input[id="icon"] + label{
-    position: relative;
-    display:block;
-    width:60px;
-    height:40px;
-    cursor : pointer;
-} 
-input[id="icon"] + label > span {
-    position: absolute;
-    display:block;
-    width:100%;
-    height:5px;
-    border-radius:30px;
-    background:#000;
-    transition: all 0.35s;  
-    z-index:2;
-
-}
-input[id="icon"] + label > span:nth-child(1) {
-    top:0px;
-}
-input[id="icon"] + label > span:nth-child(2) {
-    top:50%;
-    transform: translateY(-50%);
-}
-input[id="icon"] + label > span:nth-child(3) {
-    bottom:0px;
-}
 #modal {
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
@@ -321,4 +296,20 @@ input[id="icon"] + label > span:nth-child(3) {
     border-radius : 10px;
     font-size : 20px;
     color : white;
+}
+.icon{
+    background : url("../img/Hamburger_icon.png") no-repeat;
+    border : none;
+    width : 32px;
+    height : 32px;
+    cursor : pointer;
+
+}
+.img_container{
+    display : absolute;
+    top : 50%;
+    left : 50%
+}
+.hamburger{
+    width : 32px;
 }

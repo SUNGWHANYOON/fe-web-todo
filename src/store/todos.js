@@ -52,7 +52,6 @@ export const addSection = (sectionName) => {
 
 export const deleteSection = (id) => {
   const newTodos = todos.filter((section) => section.id !== id);
-  console.log(newTodos);
   todos = newTodos;
 };
 
@@ -82,7 +81,6 @@ export const deleteTodo = (todoId) => {
     return { ...section, todos: newTasks };
   });
   todos = newTodos;
-  console.log(todos);
   return todos;
 };
 
@@ -104,4 +102,27 @@ export const alterTodo = (todoId, { title, content }) => {
     };
   });
   todos = newTodos;
+};
+
+// 추가 : todo, section1, section2
+// 이동 : todo, section1, section2
+// 삭제 : todo, section
+export const noticeData = [];
+
+const addNoticeData = (command, data) => {
+  let str = '';
+  const { todo, before, after } = data;
+  switch (command) {
+    case 'add':
+      str = `${tooo}를 ${before}로 추가하였습니다`;
+      break;
+    case 'alter':
+      str = `${tooo}를 ${before}에서 ${after}로 이동하였습니다`;
+      break;
+    case 'delete':
+      str = `${tooo}를 ${before}에서 삭제하였습니다`;
+      break;
+  }
+
+  noticeData.push(str);
 };

@@ -1,4 +1,5 @@
 export default function Header({ $target, title }) {
+  // 추가, 삭제, 변경.. 
   this.render = () => {
     $target.insertAdjacentHTML(
       'afterbegin',

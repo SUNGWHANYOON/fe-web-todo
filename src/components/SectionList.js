@@ -74,41 +74,6 @@ export default class SectionList {
           this.onDeleteTodo.bind(this)
         )
     );
-
-    //   .map(
-    //     ({ id, title, content, type }) => `
-    //     <form class="card" data-id="${id}">
-    //       <div class="content">
-    //         <textarea
-    //           placeholder="제목을 입력하세요"
-    //           class="big-text"
-    //           rows="1"
-    //           disabled="${type === 'card'}">
-    //           ${title}
-    //         </textarea>
-    //         <input
-    //         placeholder="내용을 입력하세요"
-    //         class="middle-text"
-    //         value="${content}"
-    //         disabled="${type === 'card'}"
-    //         >
-    //         <div class="small-text ${
-    //           type === 'card' ? '' : 'hidden'
-    //         }">author by web</div>
-    //       </div>
-    //       <div class="card-buttons ${type === 'card' ? 'hidden' : ''}">
-    //         <button class="cancel cancel-disabled">취소</button>
-    //         <button disabled class="enroll enroll-disabled">등록</button>
-    //       </div>
-    //       <div class="button ${type === 'card' ? '' : 'hidden'}" >
-    //         <span class="card-button-delete material-symbols-outlined">
-    //           close
-    //         </span>
-    //       </div>
-    //     </form>
-    // `
-    //   )
-    //   .join('')}`;
   }
 
   onClickHandler() {
@@ -120,8 +85,6 @@ export default class SectionList {
         e.preventDefault();
         const { className } = e.target;
         const firstClassName = className.split(' ')[0];
-        console.log('클릭!');
-
         const sectionId = $sectionHeader.dataset.id;
 
         switch (firstClassName) {

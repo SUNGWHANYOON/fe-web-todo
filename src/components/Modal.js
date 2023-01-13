@@ -45,7 +45,6 @@ export default class Modal {
 
     $deleteBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      //debugger;
       this.onClick();
       this.onHandleDisplay();
     });

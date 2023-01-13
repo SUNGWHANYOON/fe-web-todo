@@ -48,7 +48,7 @@ export default class SectionList {
                 <span class="button-delete material-symbols-outlined"> close </span>
               </div>
             </header>
-            <article class="left${id}">
+            <article class="left${id} droppable">
             </article>
           </section>
       `

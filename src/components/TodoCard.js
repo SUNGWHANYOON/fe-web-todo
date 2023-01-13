@@ -69,6 +69,7 @@ export default class TodoCard {
     this.onChangeHandler($form);
     this.onClickHandler($form, type);
     this.onHoverHandler($form);
+    this.onDragCard($form);
   }
 
   onChangeHandler(element) {
@@ -165,5 +166,61 @@ export default class TodoCard {
     const contentTextarea = $form.querySelector('[name=content]');
     contentTextarea.style.height = 'auto';
     contentTextarea.style.height = contentTextarea.scrollHeight + 'px';
+  };
+
+  onDragCard = (element) => {
+    const $card = element;
+
+    $card.onmousedown = function (event) {
+      event.preventDefault();
+      let shiftX = event.clientX - $card.getBoundingClientRect().left;
+      let shiftY = event.clientY - $card.getBoundingClientRect().top;
+
+      $card.style.position = 'absolute';
+      $card.style.zIndex = 1000;
+      document.body.append($card);
+
+      moveAt(event.pageX, event.pageY);
+
+      function moveAt(pageX, pageY) {
+        $card.style.left = pageX - shiftX + 'px';
+        $card.style.top = pageY - shiftY + 'px';
+      }
+
+      let currentDroppable = document.querySelector('article');
+      let droppableBelow = document.querySelectorAll('.droppable')[1];
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+        $card.hidden = true;
+        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        $card.hidden = false;
+
+        if (!elemBelow) return;
+
+        if (currentDroppable != droppableBelow) {
+          if (currentDroppable) {
+          }
+          currentDroppable = droppableBelow;
+          if (currentDroppable) {
+            //enterDroppable(currentDroppable);
+          }
+        }
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      $card.onmouseup = function () {
+        document.removeEventListener('mousemove', onMouseMove);
+        droppableBelow.appendChild($card);
+        $card.style.position = 'static';
+        document.body.removeChild($card);
+        $card.onmouseup = null;
+      };
+    };
+
+    $card.ondragstart = function () {
+      return false;
+    };
   };
 }

@@ -29,7 +29,7 @@ export default class Modal {
           <div class="card-buttons">
             <button class="modal-cancel cancel">취소</button>
             <button class="modal-delete enroll-active ">확인</button>
-          </div>`
+          </div>` 
           }
         </div>
     

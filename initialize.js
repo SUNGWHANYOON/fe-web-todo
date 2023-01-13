@@ -1,4 +1,4 @@
-import { addSidebar } from './AnimatedLayer.js';
+import { initializeSidebar } from './AnimatedLayer.js';
 import {addCard,initCardDeleteModal} from './CardView.js'
 import {initialize_modal, initialize_list} from './ColumnView.js'
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
@@ -11,7 +11,7 @@ function main(){
     for(let i = 0; i < cardArray.returnLength(); i++){
         addCard(i)
     }
-    addSidebar();
+    initializeSidebar();
 }
 
 main();

@@ -12,6 +12,7 @@ columnElement.prototype.setName = function(name){
 let columnStorage = function(){
     this.arr = []
 }
+
 columnStorage.prototype.pushColumn = function(columnElement){
     this.arr.push(columnElement)
 }
@@ -76,9 +77,50 @@ cardStorage.prototype.returnLength = function(){
     return this.arr.length;
 }
 
+// 로그 그 자체, 로그 배열을 이루는 기본요소, 로그 정보가 들어있다.
+
+let logElement = function(functionNumber, cardName, logDate, cardFrom,cardTo){
+    this.functionNumber = functionNumber;
+    this.cardName = cardName;
+    this.logDate = logDate;
+    this.cardFrom = cardFrom;
+    this.cardTo = cardTo;
+}
+
+logElement.prototype.getLog = function(){
+    return [this.functionNumber,this.cardName,this.logDate,this.cardFrom,this.cardTo]
+}
+
+logElement.prototype.setLog = function(funtionNumber,cardName,logDate,cardFrom,cardTo){
+    this.functonNumber = functionNumber;
+    this.cardName = cardName;
+    this.logDate = logDate;
+    this.cardFrom = cardFrom;
+    this.cardTo = cardTo;
+}
+
+//로그 정보를 담고있는 배열역할의 클래스
+
+ let logStorage = function(){
+    this.arr = []
+ }
+
+ logStorage.prototype.getLogArray = function(){
+    return this.arr;
+ }
+
+ logStorage.prototype.pushLogArray = function(logElement){
+    this.arr.push(logElement)
+}
+
+logStorage.prototype.fixLogArray = function(i,logElement){
+    this.arr[i] = logElement
+}
+
 // 현재 시각
 let columnArray = new columnStorage();
 let cardArray = new cardStorage();
+let logArray = new logStorage();
 
 (function(){
     let now_date = new Date()
@@ -97,10 +139,20 @@ let cardArray = new cardStorage();
 
     let card_unit3 = new cardElement("HTML/CSS 공부하기","input 태그 실습",now_date,0)
     let card_unit2 = new cardElement("블로그에 포스팅할 것","GitHub 공부내용",now_date,0)
-    let card_unit1 = new cardElement("Github공부하기","add,commit,push",now_date,1)
+    let card_unit1 = new cardElement("Github 공부하기","add,commit,push",now_date,1)
 
     cardArray.pushcard(card_unit1)
     cardArray.pushcard(card_unit2)
     cardArray.pushcard(card_unit3)
+
+    let log_unit1 = new logElement(1,"Github 공부하기",now_date,0,0)
+    let log_unit2 = new logElement(1,"블로그에 포스팅할 것",now_date,0,0)
+    let log_unit3 = new logElement(1,"HTML/CSS 공부하기",now_date,0,0)
+
+    logArray.pushLogArray(log_unit1)
+    logArray.pushLogArray(log_unit2)
+    logArray.pushLogArray(log_unit3)
+
+    console.log(logArray.arr)
 })();
-export {columnElement,cardElement,columnArray,cardArray}
+export {columnElement,cardElement,logElement,columnArray,cardArray,logArray}

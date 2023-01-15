@@ -6,59 +6,64 @@ HTMLCollection.prototype.forEach = Array.prototype.forEach
 let cardAddButtonFlag = false;
 let putarea = document.getElementsByName('todo_thing');
 
-function addCard(i){
-    let input_item = cardArray.getcard()[i] // item_element
+function makeCardElement(i,current_item_id){
     let initialize_location = document.getElementsByClassName('cardLayout'); //list 배열
-
-    let current_item_id = input_item.status; //list 배열의 번호
-
-    let node = document.createElement('div');
-
+    let card = document.createElement('div');
     let templates = document.getElementsByClassName('template_item')[0];
     let input_name = cardArray.getcard()[i].name;
     let input_tag = cardArray.getcard()[i].tag;
     let input_thing = document.importNode(templates.content,true);
 
-    node.appendChild(input_thing);
-    initialize_location[current_item_id].prepend(node);
-    node.getElementsByClassName('item_name')[0].innerHTML = input_name;
-    node.getElementsByClassName('item_tag')[0].innerHTML = input_tag;
+    card.appendChild(input_thing);
+    initialize_location[current_item_id].prepend(card);
+    card.getElementsByClassName('item_name')[0].innerHTML = input_name;
+    card.getElementsByClassName('item_tag')[0].innerHTML = input_tag;
 
-    let eraseCardXButton = node.getElementsByClassName('button_x_card')[0];
+    return card;
+}
+
+
+function addCard(i){
+    let input_item = cardArray.getcard()[i] // item_element
+
+    let current_item_id = input_item.status; //list 배열의 번호
+
+    let card = makeCardElement(i,current_item_id)
+
+    let eraseCardXButton = card.getElementsByClassName('button_x_card')[0];
     let currentCard = eraseCardXButton.parentNode.parentNode;
     let currentCardTag = currentCard.getElementsByClassName('item_tag')[0]
 
-    eraseCardXButton.addEventListener('mouseover',(event)=>{
-        currentCard.setAttribute('style','background-color:pink; border:solid; border-color:red')
-        currentCardTag.setAttribute('style','background-color:pink')
-    })
-    eraseCardXButton.addEventListener('mouseout',(event)=>{
-        currentCard.setAttribute('style','border:"none"')
-        currentCardTag.setAttribute('style','background-color:white')
-
-    })
-    eraseCardXButton.addEventListener('click',(event)=>{
-        currentCard.getElementsByClassName('card_modal_background')[0].style.display = '';
-    })
-
+    eraseCardXButtonHoverAndEventHandler(eraseCardXButton,currentCard,currentCardTag)
     initCardDeleteModal(currentCard,current_item_id)
     innerCircleCount(current_item_id)
 
 }
 
-function make_button(i){
+function insertCardElementText(insertTitleholderText,insertSetClassText){
+    let inputText = document.createElement('input');
+    inputText.setAttribute('placeholder',insertTitleholderText)
+    inputText.setAttribute('class',insertSetClassText)
+
+    return inputText
+}
+
+function insertCardElementButton(insertTitleholderButton,insertSetClassButton){
+    let inputButton = document.createElement('button');
+    inputButton.innerHTML = insertTitleholderButton;
+    inputButton.setAttribute('class',insertSetClassButton);
+
+    return inputButton
+}
+
+function insertCardElement(i){
     let buttonContainer = document.createElement('div')
     buttonContainer.setAttribute('class','plus_todo')
 
     //input title, input context
-    let inputtext1 = document.createElement('input');
-    let inputtext2 = document.createElement('input');
 
-    inputtext1.setAttribute('placeholder','제목을 입력하세요')
-    inputtext2.setAttribute('placeholder','내용을 입력하세요')
-
-    inputtext1.setAttribute('class','input_title')
-    inputtext2.setAttribute('class','input_context')
+    let inputtext1 = insertCardElementText('제목을 입력하세요','input_title')
+    let inputtext2 = insertCardElementText('내용을 입력하세요','input_context')
 
     buttonContainer.appendChild(inputtext1)
     buttonContainer.appendChild(inputtext2)
@@ -68,23 +73,14 @@ function make_button(i){
     let childContainer = document.createElement('div');
     childContainer.setAttribute('class','plus_button_between');
 
-    let button1 = document.createElement('button');
-    let button2 = document.createElement('button');
+    let button1 = insertCardElementButton('취소','plus_item_cancel')
+    let button2 = insertCardElementButton('등록','plus_item_join')
 
-    button1.innerHTML = '취소';
-    button2.innerHTML = '등록';
+    //set button1, button2 eventhandler
 
-    button1.setAttribute('class','plus_item_cancel');
-    button2.setAttribute('class','plus_item_join');
+    button1.addEventListener('click',function(){insertCardDomEventListenerCancel(buttonContainer,cardAddButtonFlag)})
 
-    button1.setAttribute('id','plus_item_cancel');
-    button2.setAttribute('id','plus_item_join');
-
-    button1.addEventListener('click',(event)=>{
-        buttonContainer.remove()
-        cardAddButtonFlag = false;
-    })
-    button2.addEventListener('click',function(){makeCardDomEventListener(i,inputtext1,inputtext2,buttonContainer)})
+    button2.addEventListener('click',function(){insertCardDomEventListener(i,inputtext1,inputtext2,buttonContainer)})
 
     childContainer.appendChild(button1);
     childContainer.appendChild(button2);
@@ -94,11 +90,11 @@ function make_button(i){
     return buttonContainer;
 }
 
-function makeCardDom(i){
+function insertCardDom(i){
 
     cardAddButtonFlag = !cardAddButtonFlag;
 
-    let unit = make_button(i);
+    let unit = insertCardElement(i);
 
     if(cardAddButtonFlag){
         putarea[i].appendChild(unit);
@@ -111,22 +107,13 @@ function makeCardDom(i){
 
 window.onload = function(){
     let item_plus = document.getElementsByClassName("button_plus");
-    for(let i = 0; i < columnArray.arr.length;i++){
-        item_plus[i].addEventListener('click',function(event){
-            makeCardDom(i);
-    });
-    }
+    
+    columnArray.returnIndexArr().forEach(element =>{
+        item_plus[element].addEventListener('click',function(event){
+            insertCardDom(element);
+        });
+    })
 
-}
-
-function makeCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
-    const current_date = new Date()
-    let makeCardDomObject = new cardElement(inputtext1.value,inputtext2.value,current_date,i)
-    cardArray.pushcard(makeCardDomObject);
-
-    addCard(cardArray.getcard().length-1)
-    cardAddButtonFlag = false;
-    buttonContainer.remove();
 }
 
 function initCardDeleteModal(currentCard,current_item_id){
@@ -143,6 +130,12 @@ function initCardDeleteModal(currentCard,current_item_id){
     
     cardDeleteButton.addEventListener('click',function(){cardDeleteButtonEventListener(cardModalItself,currentCard,current_item_id)})
     cardDeleteButtonCancel.addEventListener('click',function(){cardDeleteButtonCancelEventListener(cardModalItself)})
+
+}
+
+function insertCardDomEventListenerCancel(buttonContainer,cardAddButtonFlag){
+    buttonContainer.remove()
+    cardAddButtonFlag = false;
 
 }
 
@@ -167,4 +160,31 @@ function cardDeleteButtonCancelEventListener(cardModalItself){
     cardModalItself.style.display = "none";
 }
 
-export {addCard,makeCardDom,initCardDeleteModal}
+function insertCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
+    if(inputtext1.value !== ""){
+        const current_date = new Date()
+        let insertCardDomObject = new cardElement(inputtext1.value,inputtext2.value,current_date,i)
+        cardArray.pushcard(insertCardDomObject);
+
+        addCard(cardArray.getcard().length-1)
+    }
+    cardAddButtonFlag = false;
+    buttonContainer.remove();
+}
+
+function eraseCardXButtonHoverAndEventHandler(eraseCardXButton,currentCard,currentCardTag){
+    eraseCardXButton.addEventListener('mouseover',(event)=>{
+        currentCard.setAttribute('style','background-color:pink; border:solid; border-color:red')
+        currentCardTag.setAttribute('style','background-color:pink')
+    })
+    eraseCardXButton.addEventListener('mouseout',(event)=>{
+        currentCard.setAttribute('style','border:"none"')
+        currentCardTag.setAttribute('style','background-color:white')
+
+    })
+    eraseCardXButton.addEventListener('click',(event)=>{
+        currentCard.getElementsByClassName('card_modal_background')[0].style.display = '';
+    })
+}
+
+export {addCard,insertCardDom,initCardDeleteModal}

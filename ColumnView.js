@@ -1,34 +1,42 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
-import {addCard, makeCardDom} from './CardView.js'
+import {addCard, insertCardDom} from './CardView.js'
 import {innerCircleCount} from './utils/utils.js'
 
-function initialize_list(i){
 
-    let initialize_location = document.getElementById('main');
+function initializeColumn(i){
 
-    let node = document.createElement('div');
-    let templates = document.getElementsByClassName('template_list')[0];
-    let input_name = columnArray.getColumn()[i].name;
-    let input_thing = document.importNode(templates.content,true);
-    node.appendChild(input_thing);
-    node.setAttribute('class',"addCard_here");
+    let mainLocation = document.getElementById('main');
+    let columnUnit = makeColumnUnit()
+    let cardLayout = makeCardLayout()
 
-    let cardLayout = document.createElement('div');
-    cardLayout.setAttribute('class','cardLayout');
-    node.appendChild(cardLayout);
+    columnUnit.appendChild(cardLayout);
 
-    let columnNameLocation = node.getElementsByClassName('list_name')[0]
-    changeColumnNameEventHandler(columnNameLocation,i,input_name)
-    initialize_location.appendChild(node);
-
-    document.getElementsByClassName('list_name')[i].innerHTML = input_name;
+    let columnInputName = columnArray.getColumn()[i].name;
+    let columnNameLocation = columnUnit.getElementsByClassName('list_name')[0]
+    changeColumnNameEventHandler(columnNameLocation,i,columnInputName)
+    mainLocation.appendChild(columnUnit);
+    document.getElementsByClassName('list_name')[i].innerHTML = columnInputName;
 
     innerCircleCount(i)
 
 }
 
+function makeColumnUnit(){
+    let columnUnit = document.createElement('div');
+    let columnTemplates = document.getElementsByClassName('template_list')[0];
+    let columnInputThing = document.importNode(columnTemplates.content,true);
+    columnUnit.appendChild(columnInputThing);
+    columnUnit.setAttribute('class',"addCard_here");
+    return columnUnit
+}
 
-function initialize_modal(){
+function makeCardLayout(){
+    let cardLayout = document.createElement('div');
+    cardLayout.setAttribute('class','cardLayout');
+    return cardLayout
+}
+
+function initializeModal(){
     let modal_input_location = document.getElementById('main');
     let modal_templates = document.getElementsByClassName('todo_plus_modal')[0];
     let input_modal = document.importNode(modal_templates.content,true);
@@ -40,12 +48,13 @@ function initialize_modal(){
 }
 
 //우측 하단 + 이벤트리스너
-const button = document.getElementById('plus_list');
-button.addEventListener('click',(event) =>{
-    document.getElementById('modal').style.display = ""
-    onload_function()
-
-});
+function columnAddBlueButton(){
+    const button = document.getElementById('plus_list');
+    button.addEventListener('click',(event) =>{
+        document.getElementById('modal').style.display = ""
+        onload_function()
+    });
+}
 
 function addColumn(){
         let plus_item_name = document.getElementById('item_plus_name').value
@@ -53,10 +62,10 @@ function addColumn(){
         columnArray.pushColumn(new columnElement(plus_item_name))
 
         let input_card_index = columnArray.returnLength()-1;
-        initialize_list(input_card_index)
+        initializeColumn(input_card_index)
         let item_plus = document.getElementsByClassName("button_plus")[input_card_index];
         item_plus.addEventListener('click',function(event){
-                makeCardDom(input_card_index);
+                insertCardDom(input_card_index);
         });
         document.getElementById('modal').style.display = "none"
     }
@@ -82,4 +91,4 @@ function changeColumnNameEventHandler(columnNameLocation,i,input_name){
     })
 }
 
-export {initialize_modal, initialize_list}
+export {initializeModal, initializeColumn,columnAddBlueButton}

@@ -32,6 +32,10 @@ columnStorage.prototype.returnLength = function(){
     return this.arr.length;
 }
 
+columnStorage.prototype.returnIndexArr = function(){
+    return Array.from(Array(this.arr.length).keys())
+}
+
 // cardElement 정의 card은 카드와 같다.
 
 let cardElement = function(name,tag,date,status){
@@ -75,6 +79,10 @@ cardStorage.prototype.getcard = function(){
 
 cardStorage.prototype.returnLength = function(){
     return this.arr.length;
+}
+
+cardStorage.prototype.returnIndexArr = function(){
+    return Array.from(Array(this.arr.length).keys())
 }
 
 // 로그 그 자체, 로그 배열을 이루는 기본요소, 로그 정보가 들어있다.
@@ -153,6 +161,5 @@ let logArray = new logStorage();
     logArray.pushLogArray(log_unit2)
     logArray.pushLogArray(log_unit3)
 
-    console.log(logArray.arr)
 })();
 export {columnElement,cardElement,logElement,columnArray,cardArray,logArray}

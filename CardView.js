@@ -30,9 +30,11 @@ function addCard(i){
     let card = makeCardElement(i,current_item_id)
 
     let eraseCardXButton = card.getElementsByClassName('button_x_card')[0];
-    let currentCard = eraseCardXButton.parentNode.parentNode;
-    let currentCardTag = currentCard.getElementsByClassName('item_tag')[0]
+    let currentCard = eraseCardXButton.parentNode.parentNode.parentNode;
+    let currentCardTag = currentCard.getElementsByClassName('item_tag')[0];
+    let fixCardButton = card.getElementsByClassName('card_fix')[0];
 
+    fixCardButtonEventHandler(fixCardButton,currentCard)
     eraseCardXButtonHoverAndEventHandler(eraseCardXButton,currentCard,currentCardTag)
     initCardDeleteModal(currentCard,current_item_id)
     innerCircleCount(current_item_id)
@@ -184,6 +186,59 @@ function eraseCardXButtonHoverAndEventHandler(eraseCardXButton,currentCard,curre
     eraseCardXButton.addEventListener('click',(event)=>{
         currentCard.getElementsByClassName('card_modal_background')[0].style.display = '';
     })
+}
+
+function fixCardButtonEventHandler(fixCardButton,currentCard){
+    fixCardButton.addEventListener('click',(event)=>{
+        const fixCardNode = FixCardElement(0,currentCard);
+        currentCard.parentNode.appendChild(fixCardNode);
+        currentCard.style.display = "none";
+    })
+
+}
+
+
+function FixCardElement(i,currentCard){
+    let buttonContainer = document.createElement('div')
+    buttonContainer.setAttribute('class','plus_todo')
+
+    //input title, input context
+
+    let inputtext1 = insertCardElementText('제목을 입력하세요','input_title')
+    let inputtext2 = insertCardElementText('내용을 입력하세요','input_context')
+
+    buttonContainer.appendChild(inputtext1)
+    buttonContainer.appendChild(inputtext2)
+
+    //input button1, input button2
+
+    let childContainer = document.createElement('div');
+    childContainer.setAttribute('class','plus_button_between');
+
+    let button1 = insertCardElementButton('취소','plus_item_cancel')
+    let button2 = insertCardElementButton('수정','plus_item_join')
+
+    //set button1, button2 eventhandler
+
+    button1.addEventListener('click',function(){fixCardDomEventListenerCancel(buttonContainer,currentCard)})
+
+    button2.addEventListener('click',function(){fixCardDomEventListener(i,inputtext1,inputtext2,buttonContainer)})
+
+    childContainer.appendChild(button1);
+    childContainer.appendChild(button2);
+
+    buttonContainer.appendChild(childContainer);
+
+    return buttonContainer;
+}
+
+function fixCardDomEventListenerCancel(buttonContainer,currentCard){
+    currentCard.style.display = "";
+    buttonContainer.remove()
+
+}
+function fixCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
+
 }
 
 export {addCard,insertCardDom,initCardDeleteModal}

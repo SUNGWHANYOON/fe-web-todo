@@ -335,3 +335,9 @@ body{
     transform : translatex(-110%);
     transition : all 0.25s ease-in-out;
 }
+.card_fix{
+    width:15px;
+    height : 15px;
+    padding-top : 17px;
+    padding-left : 20px;
+}

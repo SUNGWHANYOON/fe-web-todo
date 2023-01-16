@@ -313,9 +313,25 @@ body{
 .hamburger{
     width : 32px;
 }
-.layer{
-    z-index : 10;
+.sidebarOn{
+    position : absolute;
+    display : "" !important;
     height : 100%;
-    width : 20%;
-    background-color : yellow;
+    width : 30%;
+    left : 100%;
+    top : 0%;
+    background-color : rgb(196, 209, 170);
+    transform : translatex(-110%);
+    transition : all 10s ease-in-out;
+}
+.sidebarOff{
+    position : absolute;
+    display : "none" !important;
+    height : 100%;
+    width : 30%;
+    left : 100%;
+    top : 0%;
+    background-color : rgba(196, 209, 170, 0.593);
+    transform : translatex(-110%);
+    transition : all 0.25s ease-in-out;
 }

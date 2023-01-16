@@ -22,7 +22,6 @@ function makeCardElement(i,current_item_id){
     return card;
 }
 
-
 function addCard(i){
     let input_item = cardArray.getcard()[i] // item_element
 

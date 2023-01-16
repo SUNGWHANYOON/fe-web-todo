@@ -16,6 +16,7 @@ function main(){
 
     initializeSidebar();
     columnAddBlueButton();
+
 }
 
 main();

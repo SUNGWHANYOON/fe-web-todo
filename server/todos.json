@@ -1,0 +1,53 @@
+{
+  "user": "euna",
+  "data": [
+    {
+      "id": 1,
+      "sectionName": "해야할 일",
+      "todos": [
+        {
+          "id": 10,
+          "title": "Github 공부하기s1",
+          "content": "add, commit, push"
+        },
+        {
+          "id": 11,
+          "title": "Github 공부하기1",
+          "content": "add, commit, push"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "sectionName": "하고 있는 일",
+      "todos": [
+        {
+          "id": 20,
+          "title": "Github 공부하기1",
+          "content": "add, commit, push"
+        },
+        {
+          "id": 21,
+          "title": "Github 공부하기1",
+          "content": "add, commit, push"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "sectionName": "완료한 일",
+      "todos": [
+        {
+          "id": 31,
+          "title": "Github 공부하기1",
+          "content": "add, commit, push"
+        },
+        {
+          "id": 32,
+          "title": "Github 공부하기1",
+          "content": "add, commit, push"
+        }
+      ]
+    }
+  ]
+}

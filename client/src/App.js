@@ -3,6 +3,7 @@ import AddButton from './components/AddButton.js';
 import Header from './components/Header.js';
 import SectionList from './components/SectionList.js';
 import { todos } from './store/todos.js';
+import { fetchSections } from './util/api.js';
 
 export default function App({ $target }) {
   new Header({ $target, title: 'TO-DO LIST' });
@@ -23,4 +24,9 @@ export default function App({ $target }) {
       modal.setOnClick(callback);
     },
   });
+
+  const fetchData = async () => {
+    console.log(await fetchSections());
+  };
+  fetchData();
 }

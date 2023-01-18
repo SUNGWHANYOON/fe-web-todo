@@ -30,3 +30,54 @@ export const HedaerTemplate = (title) => {
       </div>
   `;
 };
+
+export const SectionTemplate = (id, sectionName, todos) => {
+  return `
+     <header class="top-box" data-id="${id}">
+        <div class="title">
+          <div class="text">${sectionName}</div>
+          <div class="notice-circle">${todos.length}</div>
+        </div>
+        <div class="buttons">
+          <span class="button-add material-symbols-outlined"> add </span>
+          <span class="button-delete material-symbols-outlined"> close </span>
+        </div>
+    </header>
+    <article class="article${id} droppable">
+    </article>
+  `;
+};
+
+export const TodoCardTemplate = (title, content) => {
+  return `
+    <div class="content">
+      <textarea       
+        disabled 
+        placeholder="제목을 입력하세요"
+        class="big-text"
+        name="title"
+        rows="1"
+        >${title}</textarea>
+      <textarea
+        disabled 
+        placeholder="내용을 입력하세요"
+        class="middle-text"
+        rows="1"
+        name="content"
+      >${content}</textarea>
+      <div class="small-text">author by web</div>
+      <div class="card-buttons hidden">
+        <button class="cancel">취소</button>
+        <button disabled class="enroll">등록</button>
+      </div>
+    </div>
+    <div class="button">
+      <span class="card-button-edit material-symbols-outlined">
+        edit
+      </span>
+      <span class="card-button-delete material-symbols-outlined">
+        close
+      </span>
+    </div>
+  `;
+};

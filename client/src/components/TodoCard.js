@@ -1,82 +1,79 @@
-export default class TodoCard {
-  constructor($target, initialState, onSubmit, onDeleteTodo) {
-    this.$target = $target;
-    this.initialState = initialState;
-    this.state = initialState;
-    this.onSubmit = (id, { title, content }) => {
-      onSubmit(id, { title, content });
-    };
-    this.onDelete = (id) => {
-      onDeleteTodo(id);
-    };
+import { TodoCardTemplate } from '../util/template.js';
 
-    this.render();
-  }
+export default function TodoCard(
+  $target,
+  initialState,
+  onSubmit,
+  onDeleteTodo
+) {
+  const $card = document.createElement('form');
+  const cardId = initialState.id;
 
-  setState(nextState) {
+  $card.classList.add(`card`, `card${cardId}`);
+  $card.dataset.id = `${cardId}`;
+
+  $target.insertAdjacentElement('afterbegin', $card);
+
+  this.state = initialState;
+
+  this.setState = (nextState) => {
     this.state = nextState;
-    const $card = this.$target.querySelector(`.card${this.state.id}`);
 
     $card.querySelector('[name=title]').value = this.state.title;
     $card.querySelector('[name=content]').value = this.state.content;
 
     this.activeChangeHandler($card);
-  }
+  };
 
-  render() {
-    const { id, title, content, type } = this.state;
-    this.$target.insertAdjacentHTML(
-      'afterbegin',
-      `
-      <form class="card card${id}" data-id="${id}">
-        <div class="content">
-          <textarea       
-            disabled 
-            placeholder="제목을 입력하세요"
-            class="big-text"
-            name="title"
-            rows="1"
-            >${title}</textarea>
-          <textarea
-            disabled 
-            placeholder="내용을 입력하세요"
-            class="middle-text"
-            rows="1"
-            name="content"
-          >${content}</textarea>
-          <div class="small-text">author by web</div>
-          <div class="card-buttons hidden">
-            <button class="cancel">취소</button>
-            <button disabled class="enroll">등록</button>
-          </div>
-        </div>
-        <div class="button">
-          <span class="card-button-edit material-symbols-outlined">
-            edit
-          </span>
-          <span class="card-button-delete material-symbols-outlined">
-            close
-          </span>
-        </div>
-      </form>
-    `
-    );
+  this.onClickHandler = (type) => {
+    $card.addEventListener('click', (e) => {
+      e.preventDefault();
+      let cardId;
 
-    const $form = document.querySelector(`.card${id}`);
-    if (type === 'new') this.onToggleClassName($form);
+      const submitTodoBtn = e.target.closest('.enroll');
+      const alterTodoBtn = e.target.closest('.card-button-edit');
+      const deleteTodoBtn = e.target.closest('.card-button-delete');
+      const cancelTodoBtn = e.target.closest('.cancel');
 
-    this.onhandleResizeHeight($form);
-    this.onChangeHandler($form);
-    this.onClickHandler($form, type);
-    this.onHoverHandler($form);
-    this.onDragCard($form);
-  }
+      const $cardForm = e.target.closest('.card');
 
-  onChangeHandler(element) {
-    const $form = element;
+      if ($cardForm) cardId = parseInt($cardForm.dataset.id);
 
-    $form.addEventListener('keyup', (e) => {
-      this.onhandleResizeHeight($form);
+      if (submitTodoBtn) {
+        onSubmit(cardId, this.state);
+        return;
+      }
+
+      if (alterTodoBtn) {
+        this.onToggleClassName($card);
+        return;
+      }
+
+      if (deleteTodoBtn) {
+        onDeleteTodo(cardId);
+        return;
+      }
+
+      if (cancelTodoBtn) {
+        if (type === 'new') this.onDelete(cardId);
+        else {
+          this.setState(initialState);
+          this.onToggleClassName($card);
+        }
+      }
+    });
+  };
+
+  // 카드 height 조절 함수
+  this.onhandleResizeHeight = () => {
+    const contentTextarea = $card.querySelector('[name=content]');
+    contentTextarea.style.height = 'auto';
+    contentTextarea.style.height = contentTextarea.scrollHeight + 'px';
+  };
+
+  this.onChangeHandler = () => {
+    $card.addEventListener('keyup', (e) => {
+      this.onhandleResizeHeight();
       const { target } = e;
       const name = target.getAttribute('name');
 
@@ -88,53 +85,23 @@ export default class TodoCard {
         this.setState(nextState);
       }
     });
-  }
+  };
 
-  onClickHandler(element, type) {
-    const $form = element;
-    $form.addEventListener('click', (e) => {
-      e.preventDefault();
-      const { className } = e.target;
-      const firstClassName = className.split(' ')[0];
-
-      const $card = e.target.closest(`.card`);
-      if (!$card) return;
-
-      const cardId = $card.dataset.id;
-      if (firstClassName === 'enroll') {
-        this.onSubmit(cardId, this.state);
-      } else if (firstClassName === 'card-button-edit') {
-        this.onToggleClassName($form);
-      } else if (firstClassName === 'card-button-delete') {
-        this.onDelete(cardId);
-      } else if (firstClassName === 'cancel') {
-        if (type === 'new') this.onDelete(cardId);
-        else {
-          this.setState(this.initialState);
-          this.onToggleClassName($form);
-        }
-      }
-    });
-  }
-
-  onHoverHandler(element) {
-    const $form = element;
-    const cardDeleteBtn = $form.querySelector('.card-button-delete');
+  this.onHoverHandler = () => {
+    const cardDeleteBtn = $card.querySelector('.card-button-delete');
 
     cardDeleteBtn.addEventListener('mouseover', (e) => {
       e.preventDefault();
-      const $card = e.target.closest('.card');
       $card.classList.add('card-deletable');
     });
 
     cardDeleteBtn.addEventListener('mouseout', (e) => {
       e.preventDefault();
-      const $card = e.target.closest('.card');
       $card.classList.remove('card-deletable');
     });
-  }
+  };
 
-  activeChangeHandler(element) {
+  this.activeChangeHandler = (element) => {
     const $card = element;
     const $enrollBtn = $card.querySelector('.enroll');
 
@@ -145,82 +112,91 @@ export default class TodoCard {
       $enrollBtn.classList.remove('enroll-active');
       $enrollBtn.disabled = true;
     }
-  }
+  };
 
-  onToggleClassName(element) {
-    const $form = element;
-    const $textareas = $form.querySelectorAll('textarea');
-    const $smallText = $form.querySelector('.small-text');
-    const $cardBtns = $form.querySelector('.card-buttons');
-    const $deleteBtn = $form.querySelector('.button');
+  this.onToggleClassName = () => {
+    const $textareas = $card.querySelectorAll('textarea');
+    const $smallText = $card.querySelector('.small-text');
+    const $cardBtns = $card.querySelector('.card-buttons');
+    const $deleteBtn = $card.querySelector('.button');
     $textareas.forEach((textarea) => (textarea.disabled = !textarea.disabled));
-    $form.classList.toggle('form-active');
+    $card.classList.toggle('form-active');
     $smallText.classList.toggle('hidden');
     $cardBtns.classList.toggle('hidden');
     $deleteBtn.classList.toggle('hidden');
-    this.activeChangeHandler($form);
-  }
-
-  onhandleResizeHeight = (element) => {
-    const $form = element;
-    const contentTextarea = $form.querySelector('[name=content]');
-    contentTextarea.style.height = 'auto';
-    contentTextarea.style.height = contentTextarea.scrollHeight + 'px';
+    this.activeChangeHandler($card);
   };
 
-  onDragCard = (element) => {
-    const $card = element;
+  this.render = () => {
+    const { title, content, type } = this.state;
+    $card.innerHTML = `
+      ${TodoCardTemplate(title, content)}
+    `;
 
-    $card.onmousedown = function (event) {
-      event.preventDefault();
-      let shiftX = event.clientX - $card.getBoundingClientRect().left;
-      let shiftY = event.clientY - $card.getBoundingClientRect().top;
+    if (type === 'new') this.onToggleClassName();
 
-      $card.style.position = 'absolute';
-      $card.style.zIndex = 1000;
-      document.body.append($card);
-
-      moveAt(event.pageX, event.pageY);
-
-      function moveAt(pageX, pageY) {
-        $card.style.left = pageX - shiftX + 'px';
-        $card.style.top = pageY - shiftY + 'px';
-      }
-
-      let currentDroppable = document.querySelector('article');
-      let droppableBelow = document.querySelectorAll('.droppable')[1];
-
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
-        $card.hidden = true;
-        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-        $card.hidden = false;
-
-        if (!elemBelow) return;
-
-        if (currentDroppable != droppableBelow) {
-          if (currentDroppable) {
-          }
-          currentDroppable = droppableBelow;
-          if (currentDroppable) {
-            //enterDroppable(currentDroppable);
-          }
-        }
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-
-      $card.onmouseup = function () {
-        document.removeEventListener('mousemove', onMouseMove);
-        droppableBelow.appendChild($card);
-        $card.style.position = 'static';
-        document.body.removeChild($card);
-        $card.onmouseup = null;
-      };
-    };
-
-    $card.ondragstart = function () {
-      return false;
-    };
+    this.onhandleResizeHeight();
+    this.onChangeHandler();
+    this.onClickHandler(type);
+    this.onHoverHandler();
+    // this.onDragCard($form);
   };
+
+  this.render();
+
+  // onDragCard = (element) => {
+  //   const $card = element;
+
+  //   $card.onmousedown = function (event) {
+  //     event.preventDefault();
+  //     let shiftX = event.clientX - $card.getBoundingClientRect().left;
+  //     let shiftY = event.clientY - $card.getBoundingClientRect().top;
+
+  //     $card.style.position = 'absolute';
+  //     $card.style.zIndex = 1000;
+  //     document.body.append($card);
+
+  //     moveAt(event.pageX, event.pageY);
+
+  //     function moveAt(pageX, pageY) {
+  //       $card.style.left = pageX - shiftX + 'px';
+  //       $card.style.top = pageY - shiftY + 'px';
+  //     }
+
+  //     let currentDroppable = document.querySelector('article');
+  //     let droppableBelow = document.querySelectorAll('.droppable')[1];
+
+  //     function onMouseMove(event) {
+  //       moveAt(event.pageX, event.pageY);
+  //       $card.hidden = true;
+  //       let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+  //       $card.hidden = false;
+
+  //       if (!elemBelow) return;
+
+  //       if (currentDroppable != droppableBelow) {
+  //         if (currentDroppable) {
+  //         }
+  //         currentDroppable = droppableBelow;
+  //         if (currentDroppable) {
+  //           //enterDroppable(currentDroppable);
+  //         }
+  //       }
+  //     }
+
+  //     document.addEventListener('mousemove', onMouseMove);
+
+  //     $card.onmouseup = function () {
+  //       document.removeEventListener('mousemove', onMouseMove);
+  //       droppableBelow.appendChild($card);
+  //       $card.style.position = 'static';
+  //       document.body.removeChild($card);
+  //       $card.onmouseup = null;
+  //     };
+  //   };
+
+  //   $card.ondragstart = function () {
+  //     return false;
+  //   };
+  // };
 }

@@ -1,5 +1,7 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 import {innerCircleCount} from './utils/utils.js'
+import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchData.js'
+
 
 HTMLCollection.prototype.forEach = Array.prototype.forEach
 
@@ -192,9 +194,8 @@ function FixCardElement(i,currentCard){
     buttonContainer.setAttribute('class','plus_todo')
 
     //input title, input context
-
-    let inputtext1 = insertCardElementText('제목을 입력하세요','input_title')
-    let inputtext2 = insertCardElementText('내용을 입력하세요','input_context')
+    let inputtext1 = insertCardElementText(currentCard.getElementsByClassName("item_name")[0].innerHTML,'input_title')
+    let inputtext2 = insertCardElementText(currentCard.getElementsByClassName("item_tag")[0].value,'input_context')
 
     buttonContainer.appendChild(inputtext1)
     buttonContainer.appendChild(inputtext2)
@@ -206,12 +207,11 @@ function FixCardElement(i,currentCard){
 
     let button1 = insertCardElementButton('취소','plus_item_cancel')
     let button2 = insertCardElementButton('수정','plus_item_join')
-
     //set button1, button2 eventhandler
 
     button1.addEventListener('click',function(){fixCardDomEventListenerCancel(buttonContainer,currentCard)})
 
-    button2.addEventListener('click',function(){fixCardDomEventListener(i,inputtext1,inputtext2,buttonContainer)})
+    button2.addEventListener('click',function(){fixCardDomEventListener(buttonContainer,currentCard)})
 
     childContainer.appendChild(button1);
     childContainer.appendChild(button2);
@@ -221,12 +221,42 @@ function FixCardElement(i,currentCard){
     return buttonContainer;
 }
 
+//수정버튼 -> 취소버튼
 function fixCardDomEventListenerCancel(buttonContainer,currentCard){
     currentCard.style.display = "";
     buttonContainer.remove()
 
 }
-function fixCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
+
+//수정버튼 -> 하늘색 수정버튼
+function fixCardDomEventListener(buttonContainer,currentCard){
+
+    let fixCardTitle = buttonContainer.getElementsByClassName("input_title")[0]
+    let fixCardTag = buttonContainer.getElementsByClassName('input_context')[0]
+
+    let beforeCardName = currentCard.getElementsByClassName("item_name")[0].innerHTML;
+    let beforeCardTag = currentCard.getElementsByClassName("item_tag")[0].value;
+    if(fixCardTitle.value && fixCardTag.value){
+        let beforeCardIdx = cardArray.findIdxByName(beforeCardName)
+        let beforeCardStatus = cardArray.getcard()[beforeCardIdx].status
+
+        let bodyData = {
+            "name" : fixCardTitle.value,
+            "tag" : fixCardTag.value,
+            "status" : beforeCardStatus
+        }
+        let nowDate = new Date()
+        cardArray.fixcard(beforeCardStatus,new cardElement(fixCardTitle.value,fixCardTag.value,nowDate,beforeCardStatus))
+        console.log(cardArray)
+        fetchPut("card",beforeCardIdx+1,bodyData)
+
+        currentCard.getElementsByClassName("item_name")[0].innerHTML = fixCardTitle.value
+        currentCard.getElementsByClassName("item_tag")[0].value = fixCardTag.value
+
+    }
+
+    buttonContainer.remove()
+    currentCard.style.display = ""
 
 }
 

@@ -12,7 +12,7 @@ async function fetchPost(storage,idx,bodyData){
     await fetch(url,{
         method : "POST",
         headers : {
-            'Content-Type' : 'application/json'
+            'Content-Type' : 'application/json',
         },
         body : JSON.stringify(bodyData)
     })
@@ -21,7 +21,10 @@ async function fetchPost(storage,idx,bodyData){
 async function fetchDelete(storage,idx) {
     const url = 'http://localhost:3000/'+storage+'/'+idx;
     await fetch(url,{
-    method : "DELETE"
+    method : "DELETE",
+    headers : {
+        'Content-Type':'application/json',
+    }
 
     })
 }
@@ -30,7 +33,10 @@ async function fetchPut(storage,idx,bodyData){
     const url = 'http://localhost:3000/'+storage+'/'+idx;
     await fetch(url,{
     method : "PUT",
-    body : bodyData
+    headers : {
+        'Content-Type' : 'application/json',
+    },
+    body : JSON.stringify(bodyData)
     })
 }
 

@@ -85,6 +85,16 @@ cardStorage.prototype.returnIndexArr = function(){
     return Array.from(Array(this.arr.length).keys())
 }
 
+cardStorage.prototype.findIdxByName = function(name){
+    let idx;
+    this.returnIndexArr().forEach((i)=>{
+        if(this.arr[i].name == name)
+        idx = i;
+        return;
+    })
+    return idx;
+}
+
 // 로그 그 자체, 로그 배열을 이루는 기본요소, 로그 정보가 들어있다.
 
 let logElement = function(functionNumber, cardName, logDate, cardFrom,cardTo){

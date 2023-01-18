@@ -1,13 +1,21 @@
-let putarea = document.getElementsByTagName('body')[0]
+let body = document.getElementsByTagName('body')[0]
 
 function initializeSidebar(){
     let sidebarUnit = document.createElement('div');
     let templates = document.getElementsByClassName('animated_layer')[0];
     let input_thing = document.importNode(templates.content,true);
     sidebarUnit.appendChild(input_thing)
-    putarea.appendChild(sidebarUnit);
+    body.appendChild(sidebarUnit);
 
+    const sidebarXButton = sidebarUnit.getElementsByClassName('button_x_card')[0]
+    sidebarXButtonHandler(sidebarXButton)
     addSidebar()
+}
+
+function sidebarXButtonHandler(sidebarXButton){
+    sidebarXButton.addEventListener('click',(event)=>{
+        sidebarXButton.parentNode.parentNode.style.display = "none";
+    })
 }
 
 function addSidebar(){

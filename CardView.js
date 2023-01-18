@@ -104,7 +104,8 @@ function insertCardDom(i){
     }
     else{
         unit = document.getElementsByClassName('plus_todo')[0];
-        unit.remove();
+        if(unit)
+            unit.remove();
     }
 }
 
@@ -136,12 +137,14 @@ function cardDeleteButtonEventListener(cardModalItself,currentCard,current_item_
     let name = currentCard.getElementsByClassName('item_name')[0].innerHTML;
 
     let idx= -1;
-    cardArray.arr.forEach(element=>{
+    cardArray.getcard().forEach(element=>{
         idx++;
         if(name == element.name)
             {
+                
+                fetchDelete("card",element.storageId)
                 cardArray.deletecard(idx)
-                return false;
+                return;
             }
     })
     innerCircleCount(current_item_status)
@@ -154,11 +157,24 @@ function cardDeleteButtonCancelEventListener(cardModalItself){
 
 function insertCardDomEventListener(i,inputtext1,inputtext2,buttonContainer){
     if(inputtext1.value !== ""){
-        const current_date = new Date()
-        let insertCardDomObject = new cardElement(inputtext1.value,inputtext2.value,current_date,i)
-        cardArray.pushcard(insertCardDomObject);
+        fetchPost("card",{
+            "name" : inputtext1.value,
+            "tag" : inputtext2.value,
+            "status" : i
+        })
 
-        addCard(cardArray.getcard().length-1)
+        getJSONData("card").then(data=>{
+
+            data.forEach((element,index)=>{
+                if(index == data.length-1){
+                    const current_date = new Date()
+                    let insertCardDomObject = new cardElement(element.name,element.tag,current_date,element.status,element.id)
+                    cardArray.pushcard(insertCardDomObject);
+                    addCard(cardArray.getcard().length-1)
+                }
+            })
+        })
+
     }
     cardAddButtonFlag = false;
     buttonContainer.remove();
@@ -239,16 +255,16 @@ function fixCardDomEventListener(buttonContainer,currentCard){
     if(fixCardTitle.value && fixCardTag.value){
         let beforeCardIdx = cardArray.findIdxByName(beforeCardName)
         let beforeCardStatus = cardArray.getcard()[beforeCardIdx].status
-
+        
         let bodyData = {
             "name" : fixCardTitle.value,
             "tag" : fixCardTag.value,
             "status" : beforeCardStatus
         }
         let nowDate = new Date()
-        cardArray.fixcard(beforeCardStatus,new cardElement(fixCardTitle.value,fixCardTag.value,nowDate,beforeCardStatus))
-        console.log(cardArray)
-        fetchPut("card",beforeCardIdx+1,bodyData)
+        const newStorageId = cardArray.getcard()[beforeCardIdx].storageId
+        cardArray.fixcard(beforeCardStatus,new cardElement(fixCardTitle.value,fixCardTag.value,nowDate,beforeCardStatus,newStorageId))
+        fetchPut("card",newStorageId,bodyData)
 
         currentCard.getElementsByClassName("item_name")[0].innerHTML = fixCardTitle.value
         currentCard.getElementsByClassName("item_tag")[0].value = fixCardTag.value

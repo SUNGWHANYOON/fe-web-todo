@@ -63,7 +63,7 @@ function addColumn(){
         const columnJSONBody = {
             "name" : plus_item_name
         }
-        fetchPost("column",columnArray.returnLength()-1,columnJSONBody)
+        fetchPost("column",columnJSONBody)
 
 
         let input_card_index = columnArray.returnLength()-1;

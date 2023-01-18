@@ -9,27 +9,25 @@ function main(){
 
 
     getJSONData("column").then(data=>{
-        
-        for(let i = 0; i < data.length; i++)
-        {
-            let new_column = new columnElement(data[i].name)
+        data.forEach((element,index)=>{
+            const new_column = new columnElement(data[index].name,data[index].id)
             columnArray.pushColumn(new_column)
-        }
+        })
         
         getJSONData("card").then(data=>{
-            for(let j = 0; j < data.length; j++){
-                let nowDate = new Date();
-                let new_card = new cardElement(data[j].name,data[j].tag,nowDate,data[j].status)
+            data.forEach((element,index)=>{
+                const nowDate = new Date();
+                const new_card = new cardElement(data[index].name,data[index].tag,nowDate,data[index].status,data[index].id)
                 cardArray.pushcard(new_card)
-            }
+            })
 
-            cardArray.returnIndexArr().forEach(element =>{
-                addCard(element)
+            cardArray.getcard().forEach((element,index)=>{
+                addCard(index)
             })
         })
         
-        columnArray.returnIndexArr().forEach(element =>{
-            initializeColumn(element)
+        columnArray.getColumn().forEach((element,index) =>{
+            initializeColumn(index)
         })
 
 
@@ -58,9 +56,12 @@ function columnPlusAndDelete(){
         });
     })
 
+    //여기 새로 생긴거 X EventListener 등록해야함.
+
 }
 
 function deleteColumn(idx){
     let columnLayer = document.getElementsByClassName("addCard_here")
     columnLayer[idx].style.display = "none"
+    fetchDelete("column",columnArray.getColumn()[idx].storageId)
 }

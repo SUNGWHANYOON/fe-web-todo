@@ -1,5 +1,6 @@
-let columnElement = function(name){
+const columnElement = function(name,storageId){
     this.name = name || "blank";
+    this.storageId = storageId;
 }
 columnElement.prototype.getName = function(){
     return this.name;
@@ -9,18 +10,19 @@ columnElement.prototype.setName = function(name){
 }
 //column 정의, column 배열을 담고있고 각종 메소드가 있음.
 
-let columnStorage = function(){
+const columnStorage = function(){
     this.arr = []
 }
 
 columnStorage.prototype.pushColumn = function(columnElement){
-    this.arr.push(columnElement)
+    this.arr = [...this.arr, columnElement]
 }
+
 columnStorage.prototype.getColumn = function(){
     return this.arr;
 }
 
-columnStorage.prototype.deleteColumn = function(i){
+columnStorage.prototype.deconsteColumn = function(i){
     this.arr.splice(i,1);
 }
 
@@ -38,11 +40,12 @@ columnStorage.prototype.returnIndexArr = function(){
 
 // cardElement 정의 card은 카드와 같다.
 
-let cardElement = function(name,tag,date,status){
+const cardElement = function(name,tag,date,status,storageId){
     this.name = name;
     this.tag= tag;
     this.date = date;
     this.status = status;
+    this.storageId = storageId;
 }
 
 cardElement.prototype.getcard = function(){
@@ -58,7 +61,7 @@ cardElement.prototype.setcard = function(name,tag,date,status){
 
 // card의 정의, cardElement 배열을 담고 있고 메소드 정의가 되어있음.
 
-let cardStorage = function(){
+const cardStorage = function(){
     this.arr = []
 }
 
@@ -66,11 +69,11 @@ cardStorage.prototype.pushcard = function(cardElement){
     this.arr.push(cardElement)
 }
 
-cardStorage.prototype.deletecard = function(i){
-    this.arr.splice(i,1);
+cardStorage.prototype.deletecard = function(idx){
+    this.arr.splice(idx,1);
 }
-cardStorage.prototype.fixcard = function(i,cardElement){
-    this.arr[i] = cardElement;
+cardStorage.prototype.fixcard = function(idx,cardElement){
+    this.arr[idx] = cardElement;
 }
 
 cardStorage.prototype.getcard = function(){
@@ -97,7 +100,7 @@ cardStorage.prototype.findIdxByName = function(name){
 
 // 로그 그 자체, 로그 배열을 이루는 기본요소, 로그 정보가 들어있다.
 
-let logElement = function(functionNumber, cardName, logDate, cardFrom,cardTo){
+const logElement = function(functionNumber, cardName, logDate, cardFrom,cardTo){
     this.functionNumber = functionNumber;
     this.cardName = cardName;
     this.logDate = logDate;
@@ -119,7 +122,7 @@ logElement.prototype.setLog = function(funtionNumber,cardName,logDate,cardFrom,c
 
 //로그 정보를 담고있는 배열역할의 클래스
 
- let logStorage = function(){
+ const logStorage = function(){
     this.arr = []
  }
 
@@ -136,8 +139,8 @@ logStorage.prototype.fixLogArray = function(i,logElement){
 }
 
 // 현재 시각
-let columnArray = new columnStorage();
-let cardArray = new cardStorage();
-let logArray = new logStorage();
+const columnArray = new columnStorage();
+const cardArray = new cardStorage();
+const logArray = new logStorage();
 
 export {columnElement,cardElement,logElement,columnArray,cardArray,logArray}

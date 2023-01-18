@@ -7,7 +7,7 @@
 //     })
 // }
 
-async function fetchPost(storage,idx,bodyData){
+async function fetchPost(storage,bodyData){
     const url = 'http://localhost:3000/'+storage;
     await fetch(url,{
         method : "POST",

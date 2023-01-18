@@ -104,6 +104,8 @@ export const alterTodo = (todoId, { title, content }) => {
   todos = newTodos;
 };
 
+//xport const moveTodo = (sectionId, )
+
 // 추가 : todo, section1, section2
 // 이동 : todo, section1, section2
 // 삭제 : todo, section

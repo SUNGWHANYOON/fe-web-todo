@@ -22,7 +22,7 @@ export default function TodoCard(
     $card.querySelector('[name=title]').value = this.state.title;
     $card.querySelector('[name=content]').value = this.state.content;
 
-    this.activeChangeHandler($card);
+    this.activeChangeHandler();
   };
 
   this.onClickHandler = (type) => {
@@ -101,8 +101,7 @@ export default function TodoCard(
     });
   };
 
-  this.activeChangeHandler = (element) => {
-    const $card = element;
+  this.activeChangeHandler = () => {
     const $enrollBtn = $card.querySelector('.enroll');
 
     if (this.state.title.length > 0) {
@@ -124,7 +123,64 @@ export default function TodoCard(
     $smallText.classList.toggle('hidden');
     $cardBtns.classList.toggle('hidden');
     $deleteBtn.classList.toggle('hidden');
-    this.activeChangeHandler($card);
+    this.activeChangeHandler();
+  };
+
+  this.onDragCard = () => {
+    $card.onmousedown = function (event) {
+      event.preventDefault();
+      let shiftX = event.clientX - $card.getBoundingClientRect().left;
+      let shiftY = event.clientY - $card.getBoundingClientRect().top;
+
+      const $newCard = $card.cloneNode(true);
+
+      $newCard.style.position = 'absolute';
+      $newCard.style.zIndex = 1000;
+
+      document.body.append($newCard);
+
+      moveAt(event.pageX, event.pageY);
+
+      function moveAt(pageX, pageY) {
+        $newCard.style.left = pageX - shiftX + 'px';
+        $newCard.style.top = pageY - shiftY + 'px';
+      }
+
+      let currentDroppable = document.querySelector('article');
+      let droppableBelow = document.querySelectorAll('.droppable')[1];
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+        $newCard.hidden = true;
+        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        $newCard.hidden = false;
+
+        if (!elemBelow) return;
+
+        if (currentDroppable != droppableBelow) {
+          if (currentDroppable) {
+          }
+          currentDroppable = droppableBelow;
+          if (currentDroppable) {
+            //enterDroppable(currentDroppable);
+          }
+        }
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      $newCard.onmouseup = function () {
+        document.removeEventListener('mousemove', onMouseMove);
+        droppableBelow.appendChild($newCard);
+        $card.style.position = 'static';
+        document.body.removeChild($card);
+        $card.onmouseup = null;
+      };
+    };
+
+    $card.ondragstart = function () {
+      return false;
+    };
   };
 
   this.render = () => {
@@ -139,64 +195,8 @@ export default function TodoCard(
     this.onChangeHandler();
     this.onClickHandler(type);
     this.onHoverHandler();
-    // this.onDragCard($form);
+    this.onDragCard();
   };
 
   this.render();
-
-  // onDragCard = (element) => {
-  //   const $card = element;
-
-  //   $card.onmousedown = function (event) {
-  //     event.preventDefault();
-  //     let shiftX = event.clientX - $card.getBoundingClientRect().left;
-  //     let shiftY = event.clientY - $card.getBoundingClientRect().top;
-
-  //     $card.style.position = 'absolute';
-  //     $card.style.zIndex = 1000;
-  //     document.body.append($card);
-
-  //     moveAt(event.pageX, event.pageY);
-
-  //     function moveAt(pageX, pageY) {
-  //       $card.style.left = pageX - shiftX + 'px';
-  //       $card.style.top = pageY - shiftY + 'px';
-  //     }
-
-  //     let currentDroppable = document.querySelector('article');
-  //     let droppableBelow = document.querySelectorAll('.droppable')[1];
-
-  //     function onMouseMove(event) {
-  //       moveAt(event.pageX, event.pageY);
-  //       $card.hidden = true;
-  //       let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-  //       $card.hidden = false;
-
-  //       if (!elemBelow) return;
-
-  //       if (currentDroppable != droppableBelow) {
-  //         if (currentDroppable) {
-  //         }
-  //         currentDroppable = droppableBelow;
-  //         if (currentDroppable) {
-  //           //enterDroppable(currentDroppable);
-  //         }
-  //       }
-  //     }
-
-  //     document.addEventListener('mousemove', onMouseMove);
-
-  //     $card.onmouseup = function () {
-  //       document.removeEventListener('mousemove', onMouseMove);
-  //       droppableBelow.appendChild($card);
-  //       $card.style.position = 'static';
-  //       document.body.removeChild($card);
-  //       $card.onmouseup = null;
-  //     };
-  //   };
-
-  //   $card.ondragstart = function () {
-  //     return false;
-  //   };
-  // };
 }

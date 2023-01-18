@@ -27,8 +27,8 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
         sectionData,
         this.onDeleteSection,
         this.onAddTodo,
-        idx,
-        onHandleModal
+        onHandleModal,
+        idx
       );
     });
   };

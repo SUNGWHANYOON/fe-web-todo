@@ -72,11 +72,11 @@ export const TodoCardTemplate = (title, content) => {
       </div>
     </div>
     <div class="button">
-      <span class="card-button-edit material-symbols-outlined">
-        edit
-      </span>
       <span class="card-button-delete material-symbols-outlined">
         close
+      </span>
+      <span class="card-button-edit material-symbols-outlined">
+        edit
       </span>
     </div>
   `;

@@ -103,6 +103,10 @@ main .top-box {
   color: #ff4343;
 }
 
+.buttons > .button-add:hover {
+  color: #0075de;
+}
+
 .add-active {
   color: #0075de;
 }
@@ -201,6 +205,12 @@ article > .drag {
 .small-text {
   font-size: 12px;
   color: #bdbdbd;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .button > .card-button-delete {

@@ -1,4 +1,4 @@
-import { deleteTodo, alterTodo, todos } from '../store/todos.js';
+import { alterTodo, todos } from '../store/todos.js';
 import { SectionTemplate } from '../util/template.js';
 import TodoCard from './TodoCard.js';
 
@@ -7,8 +7,8 @@ export default function Section(
   initialState,
   onDeleteSection,
   onAddtodo,
-  idx,
-  onHandleModal
+  onHandleModal,
+  idx
 ) {
   const $section = document.createElement('section');
   $target.appendChild($section);
@@ -27,6 +27,7 @@ export default function Section(
     this.setState(todos[idx]);
   };
 
+  // 하위 컴포넌트에게 넘겨줄 함수
   this.onDeleteTodo = (id) => {
     console.log(id);
     onHandleModal('prompt', parseInt(id));

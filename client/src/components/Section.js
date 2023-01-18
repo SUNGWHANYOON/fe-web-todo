@@ -7,7 +7,8 @@ export default function Section(
   initialState,
   onDeleteSection,
   onAddtodo,
-  idx
+  idx,
+  onHandleModal
 ) {
   const $section = document.createElement('section');
   $target.appendChild($section);
@@ -27,12 +28,8 @@ export default function Section(
   };
 
   this.onDeleteTodo = (id) => {
-    deleteTodo(parseInt(id));
-    this.setState(todos[idx]);
-    // this.onHandleModal(() => {
-    //   deleteTodo(parseInt(id));
-    //   this.setState(todos);
-    // });
+    console.log(id);
+    onHandleModal('prompt', parseInt(id));
   };
 
   this.makeTodoCard = () => {

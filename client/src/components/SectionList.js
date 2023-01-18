@@ -19,11 +19,6 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
     this.render();
   };
 
-  this.onAddSection = (title) => {
-    addSection(title);
-    this.setState(todos);
-  };
-
   this.makeSection = (element) => {
     const $main = element;
     this.state.map((sectionData, idx) => {
@@ -32,7 +27,8 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
         sectionData,
         this.onDeleteSection,
         this.onAddTodo,
-        idx
+        idx,
+        onHandleModal
       );
     });
   };
@@ -53,9 +49,7 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
 
   this.render = () => {
     $main.innerHTML = '';
-
     this.makeSection($main);
-    //onHandleModal(this.setNewSectionTitle);
   };
 
   this.render();

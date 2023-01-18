@@ -1,14 +1,16 @@
 import { ModalTemplate } from '../util/template.js';
+import { addSection, deleteTodo, todos } from '../store/todos.js';
 
-export default function Modal({ $target, callback }) {
+export default function Modal({ $target, setAppState }) {
   const $background = document.createElement('div');
   $background.classList.add('modal-background');
 
   $target.appendChild($background);
 
   this.state = {
-    type: '',
-    inputData: { title: '', isConfirm: false },
+    type: null,
+    title: '',
+    cardId: null,
   };
 
   this.setState = (nextState) => {
@@ -18,41 +20,60 @@ export default function Modal({ $target, callback }) {
   this.onChangeHandler = () => {
     $background.addEventListener('keyup', (e) => {
       const title = e.target.value;
-
       const nextState = {
         ...this.state,
-        inputData: { ...this.state.inputData, title: title },
+        title,
       };
-      console.log(this.state);
       this.setState(nextState);
     });
   };
 
-  this.onHandleDisplay = (type) => {
-    const $modal = document.querySelector('.modal-background');
-    $modal.classList.toggle('block');
+  this.onClickHandler = () => {
+    const $cancelBtn = $background.querySelector('.modal-cancel');
+    const $deleteBtn = $background.querySelector('.modal-delete');
+
+    $cancelBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      $background.classList.toggle('block');
+    });
+
+    $deleteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const { type, title, cardId } = this.state;
+
+      switch (type) {
+        case 'input':
+          addSection(title);
+          break;
+        case 'prompt':
+          deleteTodo(cardId);
+          break;
+      }
+      setAppState(todos);
+      $background.classList.toggle('block');
+    });
   };
 
+  // type: input / prompt
   this.render = () => {
-    $background.innerHTML = `
-      ${ModalTemplate(this.state.type)}
-    `;
-    this.onChangeHandler();
+    const { type } = this.state;
+
+    if (type) {
+      $background.innerHTML = `
+        ${ModalTemplate(type)}
+      `;
+      this.onClickHandler();
+    }
+
+    if (type === 'input') this.onChangeHandler();
   };
 
   this.render();
 
-  const $cancelBtn = document.querySelector('.modal-cancel');
-  const $deleteBtn = document.querySelector('.modal-delete');
-
-  $cancelBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    this.onHandleDisplay();
-  });
-
-  $deleteBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    callback(this.state.inputData.title);
-    this.onHandleDisplay();
-  });
+  // 다른 컴포넌트가 사용하는 함수
+  this.onHandleDisplay = (type, cardId) => {
+    this.setState({ ...this.state, type, cardId });
+    this.render();
+    $background.classList.toggle('block');
+  };
 }

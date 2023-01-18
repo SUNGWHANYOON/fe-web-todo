@@ -18,6 +18,6 @@ export default function AddButton({ $target, onHandleModal }) {
 
   $button.addEventListener('click', (e) => {
     e.preventDefault();
-    onHandleModal();
+    onHandleModal('input', null);
   });
 }

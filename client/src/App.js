@@ -6,25 +6,34 @@ import { todos } from './store/todos.js';
 import { fetchSections } from './util/api.js';
 
 export default function App({ $target }) {
-  new Header({ $target, title: 'TO-DO LIST' });
+  this.state = todos;
+
+  this.setState = (nextState) => {
+    this.state = nextState;
+
+    // header.setState(todos);
+    sectionList.setState(todos);
+  };
+
+  const header = new Header({ $target, title: 'TO-DO LIST' });
 
   const sectionList = new SectionList({
     $target,
-    initialState: todos,
-    onHandleModal: (type) => {
-      modal.onHandleDisplay(type);
+    initialState: this.state,
+    onHandleModal: (type, cardId) => {
+      modal.onHandleDisplay(type, cardId);
     },
   });
 
   const modal = new Modal({
     $target,
-    callback: (title) => {
-      sectionList.onAddSection(title);
+    setAppState: (todos) => {
+      this.setState(todos);
     },
   });
 
-  const fetchData = async () => {
-    console.log(await fetchSections());
-  };
-  fetchData();
+  // const fetchData = async () => {
+  //   console.log(await fetchSections());
+  // };
+  // fetchData();
 }

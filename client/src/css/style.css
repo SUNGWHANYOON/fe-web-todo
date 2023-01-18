@@ -302,6 +302,7 @@ input:disabled {
 }
 
 .plus-button {
+  border: none;
   position: fixed;
   width: 64px;
   height: 64px;

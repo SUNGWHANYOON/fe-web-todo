@@ -4,10 +4,10 @@ import {
   deleteTodo,
   alterTodo,
   todos,
+  addSection,
 } from '../store/todos.js';
-import { SectionTemplate } from '../util/template.js';
+import AddButton from './AddButton.js';
 import Section from './Section.js';
-import TodoCard from './TodoCard.js';
 
 export default function SectionList({ $target, initialState, onHandleModal }) {
   const $main = document.createElement('main');
@@ -17,6 +17,11 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
   this.setState = (nextState) => {
     this.state = nextState;
     this.render();
+  };
+
+  this.onAddSection = (title) => {
+    addSection(title);
+    this.setState(todos);
   };
 
   this.makeSection = (element) => {
@@ -46,14 +51,17 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
     this.setState(todos);
   };
 
-  this.onHandleModal = (callback) => {
-    onHandleModal(callback);
-  };
-
   this.render = () => {
     $main.innerHTML = '';
+
     this.makeSection($main);
+    //onHandleModal(this.setNewSectionTitle);
   };
 
   this.render();
+
+  new AddButton({
+    $target,
+    onHandleModal,
+  });
 }

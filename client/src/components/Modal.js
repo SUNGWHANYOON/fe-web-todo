@@ -1,68 +1,58 @@
-export default class Modal {
-  constructor($target, type, onClick) {
-    this.$target = $target;
-    this.type = type;
-    this.onClick = () => {
-      onClick();
-    };
-    this.render();
-  }
+import { ModalTemplate } from '../util/template.js';
 
-  render() {
-    const $background = document.createElement('div');
-    $background.classList.add('modal-background');
+export default function Modal({ $target, callback }) {
+  const $background = document.createElement('div');
+  $background.classList.add('modal-background');
 
-    this.$target.appendChild($background);
+  $target.appendChild($background);
 
-    $background.innerHTML = `
-        <div class="modal">
-          ${
-            this.type === 'prompt'
-              ? `
-          <div>선택할 카드를 삭제할까요?</div>
-          <div class="card-buttons">
-            <button class="modal-cancel cancel">취소</button>
-            <button class="modal-delete enroll-active ">삭제</button>
-          </div>`
-              : `
-          <input type="text" placeholder="제목을 입력해주세요"/>
-          <div class="card-buttons">
-            <button class="modal-cancel cancel">취소</button>
-            <button class="modal-delete enroll-active ">확인</button>
-          </div>` 
-          }
-        </div>
-    
-    `;
+  this.state = {
+    type: '',
+    inputData: { title: '', isConfirm: false },
+  };
 
-    const $cancelBtn = document.querySelector('.modal-cancel');
-    const $deleteBtn = document.querySelector('.modal-delete');
+  this.setState = (nextState) => {
+    this.state = nextState;
+  };
 
-    $cancelBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.onHandleDisplay();
+  this.onChangeHandler = () => {
+    $background.addEventListener('keyup', (e) => {
+      const title = e.target.value;
+
+      const nextState = {
+        ...this.state,
+        inputData: { ...this.state.inputData, title: title },
+      };
+      console.log(this.state);
+      this.setState(nextState);
     });
+  };
 
-    $deleteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.onClick();
-      this.onHandleDisplay();
-    });
-  }
-
-  onHandleDisplay() {
+  this.onHandleDisplay = (type) => {
     const $modal = document.querySelector('.modal-background');
     $modal.classList.toggle('block');
-  }
+  };
 
-  onRemoveEventListener() {
-    const $cancelBtn = document.querySelector('.modal-cancel');
-    const $deleteBtn = document.querySelector('.modal-delete');
-    $cancelBtn.removeEventListener('click');
-  }
+  this.render = () => {
+    $background.innerHTML = `
+      ${ModalTemplate(this.state.type)}
+    `;
+    this.onChangeHandler();
+  };
 
-  setOnClick(callback) {
+  this.render();
+
+  const $cancelBtn = document.querySelector('.modal-cancel');
+  const $deleteBtn = document.querySelector('.modal-delete');
+
+  $cancelBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     this.onHandleDisplay();
-    this.onClick = callback;
-  }
+  });
+
+  $deleteBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    callback(this.state.inputData.title);
+    this.onHandleDisplay();
+  });
 }

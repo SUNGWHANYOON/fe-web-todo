@@ -81,3 +81,25 @@ export const TodoCardTemplate = (title, content) => {
     </div>
   `;
 };
+
+export const ModalTemplate = (type) => {
+  return `
+    <div class="modal">
+      ${
+        type === 'prompt'
+          ? `
+      <div>선택할 카드를 삭제할까요?</div>
+      <div class="card-buttons">
+        <button class="modal-cancel cancel">취소</button>
+        <button class="modal-delete enroll-active ">삭제</button>
+      </div>`
+          : `
+      <input type="text" name="text" placeholder="제목을 입력해주세요"/>
+      <div class="card-buttons">
+        <button class="modal-cancel cancel">취소</button>
+        <button class="modal-delete enroll-active ">확인</button>
+      </div>`
+      }
+    </div>
+  `;
+};

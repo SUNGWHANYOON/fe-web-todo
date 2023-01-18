@@ -8,20 +8,18 @@ import { fetchSections } from './util/api.js';
 export default function App({ $target }) {
   new Header({ $target, title: 'TO-DO LIST' });
 
-  const modal = new Modal($target, 'prompt');
-
-  new SectionList({
+  const sectionList = new SectionList({
     $target,
     initialState: todos,
-    onHandleModal: (callback) => {
-      modal.setOnClick(callback);
+    onHandleModal: (type) => {
+      modal.onHandleDisplay(type);
     },
   });
 
-  new AddButton({
+  const modal = new Modal({
     $target,
-    onHandleModal: (callback) => {
-      modal.setOnClick(callback);
+    callback: (title) => {
+      sectionList.onAddSection(title);
     },
   });
 

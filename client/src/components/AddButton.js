@@ -1,29 +1,23 @@
-export default class AddButton {
-  constructor({ $target, onHandleModal }) {
-    this.$target = $target;
-    this.onHandleModal = () => {
-      onHandleModal();
-    };
-    this.render();
-  }
+export default function AddButton({ $target, onHandleModal }) {
+  const $button = document.createElement('button');
+  $button.className = 'plus-button';
+  $target.appendChild($button);
 
-  render() {
-    const $div = document.createElement('div');
-    $div.className = 'plus-button';
-    this.$target.appendChild($div);
-    $div.innerHTML = `
+  this.render = () => {
+    $button.innerHTML = `
       <span class="material-symbols-outlined big-add"> add </span>
     `;
+  };
 
-    this.onClickHandler();
-  }
+  this.render();
 
-  onClickHandler() {
-    const $button = this.$target.querySelector('.plus-button');
+  this.newSectionTitle = '';
+  this.setNewSectionTitle = (title) => {
+    newSectionTitle = title;
+  };
 
-    $button.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.onHandleModal(() => {});
-    });
-  }
+  $button.addEventListener('click', (e) => {
+    e.preventDefault();
+    onHandleModal();
+  });
 }

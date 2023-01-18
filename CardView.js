@@ -106,17 +106,6 @@ function insertCardDom(i){
     }
 }
 
-window.onload = function(){
-    let item_plus = document.getElementsByClassName("button_plus");
-    
-    columnArray.returnIndexArr().forEach(element =>{
-        item_plus[element].addEventListener('click',function(event){
-            insertCardDom(element);
-        });
-    })
-
-}
-
 function initCardDeleteModal(currentCard,current_item_id){
     let cardModalInputLocation = currentCard;
     let cardModalTemplates = document.getElementsByClassName('card_delete_modal')[0];

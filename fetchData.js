@@ -1,34 +1,50 @@
-// body part
 
-// body part
-function fetchPost(name,tag,status){
-    fetch('localhost:4000/memo/',{
-    method : "POST",
-    body : JSON.stringify({
-        "name" : name,
-        "tag" : tag,
-        "status" : status
-    })
+// async function fetchPost(storage,idx,bodyData){
+//     const url = 'http://localhost:3000/'+storage+'/';
+//     await fetch(url,{
+//         method : "POST",
+//         body : JSON.stringify(bodyData)
+//     })
+// }
+
+async function fetchPost(storage,idx,bodyData){
+    const url = 'http://localhost:3000/'+storage;
+    await fetch(url,{
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(bodyData)
     })
 }
 
-function fetchDelete(idx) {
-    url = 'localhost:4000/memo/' + idx;
-    fetch(url,{
+async function fetchDelete(storage,idx) {
+    const url = 'http://localhost:3000/'+storage+'/'+idx;
+    await fetch(url,{
     method : "DELETE"
+
     })
 }
 
-function fetchPut(idx,name,tag,status){
-    url = 'localhost:4000/memo/' + idx;
-    fetch(url,{
+async function fetchPut(storage,idx,bodyData){
+    const url = 'http://localhost:3000/'+storage+'/'+idx;
+    await fetch(url,{
     method : "PUT",
-    body : JSON.stringify({
-        "name" : name,
-        "tag" : tag,
-        "status" : status
-    })
+    body : bodyData
     })
 }
 
-//function getJSONdata
+async function getJSONData(storage){
+    const url = 'http://localhost:3000/'+storage;
+    const response = await fetch(url,{
+        method : "GET",
+        hearder : {
+            
+        }
+    })
+
+   const data = await response.json()
+   return data;
+}
+
+export {fetchPost,fetchDelete,fetchPut,getJSONData}

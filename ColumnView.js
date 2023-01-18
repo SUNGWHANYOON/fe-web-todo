@@ -1,7 +1,7 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 import {addCard, insertCardDom} from './CardView.js'
 import {innerCircleCount} from './utils/utils.js'
-
+import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchData.js'
 
 function initializeColumn(i){
 
@@ -57,9 +57,14 @@ function columnAddBlueButton(){
 }
 
 function addColumn(){
-        let plus_item_name = document.getElementById('item_plus_name').value
-
+        const plus_item_name = document.getElementById('item_plus_name').value
         columnArray.pushColumn(new columnElement(plus_item_name))
+
+        const columnJSONBody = {
+            "name" : plus_item_name
+        }
+        fetchPost("column",columnArray.returnLength()-1,columnJSONBody)
+
 
         let input_card_index = columnArray.returnLength()-1;
         initializeColumn(input_card_index)

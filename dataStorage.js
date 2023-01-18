@@ -130,36 +130,4 @@ let columnArray = new columnStorage();
 let cardArray = new cardStorage();
 let logArray = new logStorage();
 
-(function(){
-    let now_date = new Date()
-
-    // 실제 칼럼 추가부분
-
-    let column_unit1 = new columnElement("해야할 일")
-    let column_unit2 = new columnElement("하고있는 일")
-    let column_unit3 = new columnElement("완료한 일")
-
-    columnArray.pushColumn(column_unit1)
-    columnArray.pushColumn(column_unit2)
-    columnArray.pushColumn(column_unit3)
-
-    // 실제 카드 추가부분
-
-    let card_unit3 = new cardElement("HTML/CSS 공부하기","input 태그 실습",now_date,0)
-    let card_unit2 = new cardElement("블로그에 포스팅할 것","GitHub 공부내용",now_date,0)
-    let card_unit1 = new cardElement("Github 공부하기","add,commit,push",now_date,1)
-
-    cardArray.pushcard(card_unit1)
-    cardArray.pushcard(card_unit2)
-    cardArray.pushcard(card_unit3)
-
-    let log_unit1 = new logElement(1,"Github 공부하기",now_date,0,0)
-    let log_unit2 = new logElement(1,"블로그에 포스팅할 것",now_date,0,0)
-    let log_unit3 = new logElement(1,"HTML/CSS 공부하기",now_date,0,0)
-
-    logArray.pushLogArray(log_unit1)
-    logArray.pushLogArray(log_unit2)
-    logArray.pushLogArray(log_unit3)
-
-})();
 export {columnElement,cardElement,logElement,columnArray,cardArray,logArray}

@@ -1,12 +1,3 @@
-
-// async function fetchPost(storage,idx,bodyData){
-//     const url = 'http://localhost:3000/'+storage+'/';
-//     await fetch(url,{
-//         method : "POST",
-//         body : JSON.stringify(bodyData)
-//     })
-// }
-
 async function fetchPost(storage,bodyData){
     const url = 'http://localhost:3000/'+storage;
     await fetch(url,{
@@ -43,10 +34,7 @@ async function fetchPut(storage,idx,bodyData){
 async function getJSONData(storage){
     const url = 'http://localhost:3000/'+storage;
     const response = await fetch(url,{
-        method : "GET",
-        hearder : {
-            
-        }
+        method : "GET"
     })
 
    const data = await response.json()

@@ -1,7 +1,19 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 import {addCard, insertCardDom} from './CardView.js'
 import {innerCircleCount} from './utils/utils.js'
-import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchData.js'
+import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchUtils.js'
+
+
+function initializeModal(){
+    let modal_input_location = document.getElementById('main');
+    let modal_templates = document.getElementsByClassName('todo_plus_modal')[0];
+    let input_modal = document.importNode(modal_templates.content,true);
+    modal_input_location.appendChild(input_modal)
+
+    let modal_itself = document.getElementById('modal');
+    modal_itself.style.display = "none"
+
+}
 
 function initializeColumn(i){
 
@@ -34,17 +46,6 @@ function makeCardLayout(){
     let cardLayout = document.createElement('div');
     cardLayout.setAttribute('class','cardLayout');
     return cardLayout
-}
-
-function initializeModal(){
-    let modal_input_location = document.getElementById('main');
-    let modal_templates = document.getElementsByClassName('todo_plus_modal')[0];
-    let input_modal = document.importNode(modal_templates.content,true);
-    modal_input_location.appendChild(input_modal)
-
-    let modal_itself = document.getElementById('modal');
-    modal_itself.style.display = "none"
-
 }
 
 //우측 하단 + 이벤트리스너

@@ -34,10 +34,6 @@ columnStorage.prototype.returnLength = function(){
     return this.arr.length;
 }
 
-columnStorage.prototype.returnIndexArr = function(){
-    return Array.from(Array(this.arr.length).keys())
-}
-
 // cardElement 정의 card은 카드와 같다.
 
 const cardElement = function(name,tag,date,status,storageId){
@@ -84,15 +80,11 @@ cardStorage.prototype.returnLength = function(){
     return this.arr.length;
 }
 
-cardStorage.prototype.returnIndexArr = function(){
-    return Array.from(Array(this.arr.length).keys())
-}
-
 cardStorage.prototype.findIdxByName = function(name){
     let idx;
-    this.returnIndexArr().forEach((i)=>{
-        if(this.arr[i].name == name)
-        idx = i;
+    this.getcard().forEach((element,index)=>{
+        if(this.arr[index].name == name)
+        idx = index;
         return;
     })
     return idx;

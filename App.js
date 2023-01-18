@@ -2,11 +2,10 @@ import { initializeSidebar } from './AnimatedLayer.js';
 import { addCard,initCardDeleteModal,insertCardDom } from './CardView.js'
 import { initializeModal, initializeColumn,columnAddBlueButton } from './ColumnView.js'
 import { columnElement,cardElement,columnArray,cardArray } from './dataStorage.js'
-import { fetchDelete, getJSONData } from './fetchData.js';
+import { fetchDelete, getJSONData } from './fetchUtils.js';
 
 function main(){
     initializeModal();
-
 
     getJSONData("column").then(data=>{
         data.forEach((element,index)=>{
@@ -31,14 +30,10 @@ function main(){
         })
 
 
-    
         initializeSidebar();
         columnAddBlueButton();
         columnPlusAndDelete();
     })
-
-
-
 }
 
 main();
@@ -47,12 +42,12 @@ function columnPlusAndDelete(){
     let columnPlus = document.getElementsByClassName("button_plus");
     let columnDelete = document.getElementsByClassName("button_x_column");
 
-    columnArray.returnIndexArr().forEach(element =>{
-        columnPlus[element].addEventListener('click',function(event){
-            insertCardDom(element);
+    columnArray.getColumn().forEach((element,index) =>{
+        columnPlus[index].addEventListener('click',function(event){
+            insertCardDom(index);
         });
-        columnDelete[element].addEventListener('dblclick',function(event){
-            deleteColumn(element)
+        columnDelete[index].addEventListener('dblclick',function(event){
+            deleteColumn(index)
         });
     })
 

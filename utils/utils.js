@@ -4,8 +4,8 @@ function innerCircleCount(currentColumnIndex){
     let i = currentColumnIndex
     let count = 0;
 
-    cardArray.returnIndexArr().forEach(element =>{
-        if(cardArray.getcard()[element].status == i)
+    cardArray.getcard().forEach((element,index) =>{
+        if(element.status == i)
         {
             count++;
         }

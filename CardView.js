@@ -1,46 +1,45 @@
 import {columnElement,cardElement,columnArray,cardArray} from './dataStorage.js'
 import {innerCircleCount} from './utils/utils.js'
-import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchData.js'
+import {fetchPost,fetchDelete,fetchPut,getJSONData} from './fetchUtils.js'
 
 
 HTMLCollection.prototype.forEach = Array.prototype.forEach
 
 let cardAddButtonFlag = false;
-let putarea = document.getElementsByName('todo_thing');
-
-function makeCardElement(i,current_item_id){
-    let initialize_location = document.getElementsByClassName('cardLayout'); //list 배열
-    let card = document.createElement('div');
-    let templates = document.getElementsByClassName('template_item')[0];
-    let input_name = cardArray.getcard()[i].name;
-    let input_tag = cardArray.getcard()[i].tag;
-    let input_thing = document.importNode(templates.content,true);
-
-    card.appendChild(input_thing);
-    initialize_location[current_item_id].prepend(card);
-    card.getElementsByClassName('item_name')[0].innerHTML = input_name;
-    card.getElementsByClassName('item_tag')[0].innerHTML = input_tag;
-
-    return card;
-}
+let cardPlusButtonInsertPlace = document.getElementsByName('todo_thing');
 
 function addCard(i){
-    let input_item = cardArray.getcard()[i] // item_element
+    let inputCardArray = cardArray.getcard()[i] // item_element
 
-    let current_item_id = input_item.status; //list 배열의 번호
-
-    let card = makeCardElement(i,current_item_id)
-
+    let currentCardStatus = inputCardArray.status; //list 배열의 번호
+    let card = makeCardElement(i,currentCardStatus,inputCardArray)
     let eraseCardXButton = card.getElementsByClassName('button_x_card')[0];
     let currentCard = eraseCardXButton.parentNode.parentNode.parentNode;
+    console.log(card,currentCard)
     let currentCardTag = currentCard.getElementsByClassName('item_tag')[0];
     let fixCardButton = card.getElementsByClassName('card_fix')[0];
 
     fixCardButtonEventHandler(fixCardButton,currentCard)
     eraseCardXButtonHoverAndEventHandler(eraseCardXButton,currentCard,currentCardTag)
-    initCardDeleteModal(currentCard,current_item_id)
-    innerCircleCount(current_item_id)
+    initCardDeleteModal(currentCard,currentCardStatus)
+    innerCircleCount(currentCardStatus)
 
+}
+
+function makeCardElement(i,currentCardStatus,inputCardArray){
+    let initialize_location = document.getElementsByClassName('cardLayout'); //list 배열
+    let card = document.createElement('div');
+    let templates = document.getElementsByClassName('template_item')[0];
+    let input_name = inputCardArray.name;
+    let input_tag = inputCardArray.tag;
+    let input_thing = document.importNode(templates.content,true);
+
+    card.appendChild(input_thing);
+    initialize_location[currentCardStatus].prepend(card);
+    card.getElementsByClassName('item_name')[0].innerHTML = input_name;
+    card.getElementsByClassName('item_tag')[0].innerHTML = input_tag;
+
+    return card;
 }
 
 function insertCardElementText(insertTitleholderText,insertSetClassText){
@@ -82,7 +81,6 @@ function insertCardElement(i){
     //set button1, button2 eventhandler
 
     button1.addEventListener('click',function(){insertCardDomEventListenerCancel(buttonContainer,cardAddButtonFlag)})
-
     button2.addEventListener('click',function(){insertCardDomEventListener(i,inputtext1,inputtext2,buttonContainer)})
 
     childContainer.appendChild(button1);
@@ -100,7 +98,7 @@ function insertCardDom(i){
     let unit = insertCardElement(i);
 
     if(cardAddButtonFlag){
-        putarea[i].appendChild(unit);
+        cardPlusButtonInsertPlace[i].appendChild(unit);
     }
     else{
         unit = document.getElementsByClassName('plus_todo')[0];

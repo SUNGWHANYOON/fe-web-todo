@@ -1,11 +1,4 @@
-import {
-  addTodo,
-  deleteSection,
-  deleteTodo,
-  alterTodo,
-  todos,
-  addSection,
-} from '../store/todos.js';
+import { addTodo, deleteSection } from '../util/api.js';
 import AddButton from './AddButton.js';
 import Section from './Section.js';
 
@@ -33,18 +26,19 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
     });
   };
 
-  this.onDeleteSection = (sectionId) => {
-    deleteSection(sectionId);
-    this.setState(todos);
+  this.onDeleteSection = async (sectionId) => {
+    const newSections = await deleteSection(sectionId);
+    this.setState(newSections);
   };
 
-  this.onAddTodo = (sectionId) => {
-    addTodo(sectionId, {
+  this.onAddTodo = async (sectionId) => {
+    console.log('실행됨');
+    const newSections = await addTodo(sectionId, {
       title: '',
       content: '',
       type: 'new',
     });
-    this.setState(todos);
+    this.setState(newSections);
   };
 
   this.render = () => {

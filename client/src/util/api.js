@@ -4,16 +4,35 @@ export const fetchSections = async () => {
   try {
     const res = await fetch(`${API_BASE_URL}/sections`);
     if (res.status === 200) {
-      return res.json();
+      return await res.json();
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-export const addSection = async (id) => {
+export const fetchSection = async (id) => {
   try {
     const res = await fetch(`${API_BASE_URL}/sections/${id}`);
+    if (res.status === 200) {
+      return await res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addSection = async (title) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/section`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+      }),
+    });
     if (res.status === 200) {
       return res.json();
     }
@@ -24,8 +43,74 @@ export const addSection = async (id) => {
 
 export const deleteSection = async (id) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/sections/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/section/${id}`, {
       method: 'DELETE',
+    });
+    if (res.status === 200) {
+      return res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchTodo = async (id) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/todos/${id}`);
+    if (res.status === 200) {
+      return res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addTodo = async (id, { title = '', content = '' }) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/section/${id}/todo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        type: 'new',
+      }),
+    });
+    if (res.status === 200) {
+      return res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteTodo = async (id) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/todos/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.status === 200) {
+      return res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const alterTodo = async (id, { title, content, type }) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/todos/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+        type: type,
+      }),
     });
     if (res.status === 200) {
       return res.json();

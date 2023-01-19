@@ -1,4 +1,4 @@
-import { HedaerTemplate } from '../util/template.js';
+import { HedaerTemplate } from '../constants/template.js';
 
 export default function Header({ $target, title }) {
   const $header = document.createElement('header');

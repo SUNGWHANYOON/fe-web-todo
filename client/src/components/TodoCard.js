@@ -1,4 +1,4 @@
-import { TodoCardTemplate } from '../util/template.js';
+import { TodoCardTemplate } from '../constants/template.js';
 
 export default function TodoCard(
   $target,
@@ -55,7 +55,7 @@ export default function TodoCard(
       }
 
       if (cancelTodoBtn) {
-        if (type === 'new') this.onDelete(cardId);
+        if (type === 'new') onDeleteTodo(cardId);
         else {
           this.setState(initialState);
           this.onToggleClassName($card);
@@ -126,36 +126,43 @@ export default function TodoCard(
     this.activeChangeHandler();
   };
 
-  this.onDragCard = () => {
-    $card.onmousedown = function (event) {
-      event.preventDefault();
-      let shiftX = event.clientX - $card.getBoundingClientRect().left;
-      let shiftY = event.clientY - $card.getBoundingClientRect().top;
+  this.onDragCard = (element) => {
+    const $card = element;
+
+    $card.addEventListener('mousedown', (e) => {
+      console.log('마우스 다운');
+      e.preventDefault();
+
+      let shiftX = e.clientX - $card.getBoundingClientRect().left;
+      let shiftY = e.clientY - $card.getBoundingClientRect().top;
 
       const $newCard = $card.cloneNode(true);
+      $card.classList.add('card-dragged');
 
+      $newCard.classList.add('card-dragging');
       $newCard.style.position = 'absolute';
       $newCard.style.zIndex = 1000;
 
       document.body.append($newCard);
 
-      moveAt(event.pageX, event.pageY);
+      // 카드를 움직이는 함수
+      moveAt(e.pageX, e.pageY);
 
       function moveAt(pageX, pageY) {
         $newCard.style.left = pageX - shiftX + 'px';
         $newCard.style.top = pageY - shiftY + 'px';
       }
 
-      let currentDroppable = document.querySelector('article');
-      let droppableBelow = document.querySelectorAll('.droppable')[1];
-
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
+      function onMouseMove(e) {
+        moveAt(e.pageX, e.pageY);
         $newCard.hidden = true;
-        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        let elemBelow = document.elementFromPoint(e.clientX, e.clientY); // 화면 밖으로 나갔을 때 처리
         $newCard.hidden = false;
 
         if (!elemBelow) return;
+
+        let currentDroppable = document.querySelector('article');
+        let droppableBelow = document.querySelectorAll('.droppable')[1];
 
         if (currentDroppable != droppableBelow) {
           if (currentDroppable) {
@@ -167,20 +174,68 @@ export default function TodoCard(
         }
       }
 
-      document.addEventListener('mousemove', onMouseMove);
-
-      $newCard.onmouseup = function () {
-        document.removeEventListener('mousemove', onMouseMove);
-        droppableBelow.appendChild($newCard);
-        $card.style.position = 'static';
-        document.body.removeChild($card);
-        $card.onmouseup = null;
+      // 기본 드래그 api 해제
+      $newCard.ondragstart = function () {
+        return false;
       };
-    };
+    });
 
-    $card.ondragstart = function () {
-      return false;
-    };
+    // $card.onmousedown = function (event) {
+    //   event.preventDefault();
+    //   let shiftX = event.clientX - $card.getBoundingClientRect().left;
+    //   let shiftY = event.clientY - $card.getBoundingClientRect().top;
+
+    //   const $newCard = $card.cloneNode(true);
+    //   $card.classList.add('card-dragged');
+    //   $newCard.classList.add('card-dragging');
+
+    //   $newCard.style.position = 'absolute';
+    //   $newCard.style.zIndex = 1000;
+
+    //   document.body.append($newCard);
+
+    //   moveAt(event.pageX, event.pageY);
+
+    //   function moveAt(pageX, pageY) {
+    //     $newCard.style.left = pageX - shiftX + 'px';
+    //     $newCard.style.top = pageY - shiftY + 'px';
+    //   }
+
+    //   let currentDroppable = document.querySelector('article');
+    //   let droppableBelow = document.querySelectorAll('.droppable')[1];
+
+    //   function onMouseMove(event) {
+    //     moveAt(event.pageX, event.pageY);
+    //     $newCard.hidden = true;
+    //     let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+    //     $newCard.hidden = false;
+
+    //     if (!elemBelow) return;
+
+    //     if (currentDroppable != droppableBelow) {
+    //       if (currentDroppable) {
+    //       }
+    //       currentDroppable = droppableBelow;
+    //       if (currentDroppable) {
+    //         //enterDroppable(currentDroppable);
+    //       }
+    //     }
+    //   }
+
+    //   document.addEventListener('mousemove', onMouseMove);
+
+    //   $newCard.onmouseup = function () {
+    //     document.removeEventListener('mousemove', onMouseMove);
+    //     droppableBelow.appendChild($newCard);
+    //     $card.style.position = 'static';
+    //     document.body.removeChild($card);
+    //     $card.onmouseup = null;
+    //   };
+    // };
+
+    // $card.ondragstart = function () {
+    //   return false;
+    // };
   };
 
   this.render = () => {
@@ -195,7 +250,7 @@ export default function TodoCard(
     this.onChangeHandler();
     this.onClickHandler(type);
     this.onHoverHandler();
-    this.onDragCard();
+    //this.onDragCard($card);
   };
 
   this.render();

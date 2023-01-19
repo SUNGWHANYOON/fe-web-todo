@@ -1,5 +1,5 @@
-import { alterTodo, todos } from '../store/todos.js';
-import { SectionTemplate } from '../util/template.js';
+import { alterTodo } from '../util/api.js';
+import { SectionTemplate } from '../constants/template.js';
 import TodoCard from './TodoCard.js';
 
 export default function Section(
@@ -21,15 +21,13 @@ export default function Section(
   };
 
   // 하위 컴포넌트에게 넘겨줄 함수
-  this.onAlterTodo = (id, { title, content }) => {
-    alterTodo(parseInt(id), { title, content });
-
-    this.setState(todos[idx]);
+  this.onAlterTodo = async (id, { title, content }) => {
+    const newSections = await alterTodo(parseInt(id), { title, content });
+    this.setState(newSections[idx]);
   };
 
   // 하위 컴포넌트에게 넘겨줄 함수
   this.onDeleteTodo = (id) => {
-    console.log(id);
     onHandleModal('prompt', parseInt(id));
   };
 
@@ -74,8 +72,8 @@ export default function Section(
     `;
 
     this.makeTodoCard();
-    this.onClickHandler();
   };
 
   this.render();
+  this.onClickHandler();
 }

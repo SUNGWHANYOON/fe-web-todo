@@ -7,12 +7,12 @@
       "todos": [
         {
           "id": 10,
-          "title": "Github 공부하기s1",
-          "content": "add, commit, push"
+          "title": "블로그에 포스팅할 것",
+          "content": "* GitHub 공부내용 \n* 모던 자바스크립트 1장 공부내용"
         },
         {
           "id": 11,
-          "title": "Github 공부하기1",
+          "title": "Github 공부하기",
           "content": "add, commit, push"
         }
       ]
@@ -23,31 +23,15 @@
       "todos": [
         {
           "id": 20,
-          "title": "Github 공부하기1",
-          "content": "add, commit, push"
-        },
-        {
-          "id": 21,
-          "title": "Github 공부하기1",
-          "content": "add, commit, push"
+          "title": "HTML/CSS 공부하기",
+          "content": "input 태그 실습"
         }
       ]
     },
     {
       "id": 3,
       "sectionName": "완료한 일",
-      "todos": [
-        {
-          "id": 31,
-          "title": "Github 공부하기1",
-          "content": "add, commit, push"
-        },
-        {
-          "id": 32,
-          "title": "Github 공부하기1",
-          "content": "add, commit, push"
-        }
-      ]
+      "todos": []
     }
   ]
 }

@@ -1,5 +1,5 @@
-import { ModalTemplate } from '../util/template.js';
-import { addSection, deleteTodo, todos } from '../store/todos.js';
+import { ModalTemplate } from '../constants/template.js';
+import { addSection, deleteTodo, fetchSections } from '../util/api.js';
 
 export default function Modal({ $target, setAppState }) {
   const $background = document.createElement('div');
@@ -37,19 +37,21 @@ export default function Modal({ $target, setAppState }) {
       $background.classList.toggle('block');
     });
 
-    $deleteBtn.addEventListener('click', (e) => {
+    $deleteBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const { type, title, cardId } = this.state;
+      let newSections = await fetchSections();
 
       switch (type) {
         case 'input':
-          addSection(title);
+          newSections = await addSection(title);
           break;
         case 'prompt':
-          deleteTodo(cardId);
+          newSections = await deleteTodo(cardId);
           break;
       }
-      setAppState(todos);
+
+      setAppState(newSections);
       $background.classList.toggle('block');
     });
   };

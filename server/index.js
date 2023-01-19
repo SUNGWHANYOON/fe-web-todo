@@ -86,7 +86,7 @@ app.get('/todos/:id', (req, res) => {
 // POST : 해당 section id값을 가진 todos에 todo추가
 app.post('/section/:id/todo', (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title = '', content = '' } = req.body;
 
   const findIdx = data.findIndex((section) => section.id === parseInt(id));
 
@@ -97,6 +97,7 @@ app.post('/section/:id/todo', (req, res) => {
     id: Date.now(),
     title,
     content,
+    type: 'new',
   });
 
   res.send(data);
@@ -125,7 +126,7 @@ app.delete('/todos/:id', (req, res) => {
 // PATCH : 해당 todo id값을 가진 todo수정
 app.patch('/todos/:id', (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, type } = req.body;
 
   let findIdx;
   data.forEach(({ todos }) => {
@@ -136,6 +137,7 @@ app.patch('/todos/:id', (req, res) => {
           ...todos[findIdx],
           title,
           content,
+          type,
         };
       }
     });

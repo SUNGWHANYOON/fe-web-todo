@@ -1,8 +1,16 @@
 import { HedaerTemplate } from '../constants/template.js';
 
-export default function Header({ $target, title }) {
+export default function Header({ $target, initialState, title }) {
   const $header = document.createElement('header');
   $target.appendChild($header);
+
+  this.state = initialState;
+
+  this.setState = (nextState) => {
+    this.state = nextState;
+    console.log(this.state);
+    // this.render();
+  };
 
   this.render = () => {
     $header.innerHTML = `

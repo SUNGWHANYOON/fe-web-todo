@@ -1,5 +1,5 @@
 import { ModalTemplate } from '../constants/template.js';
-import { addSection, deleteTodo, fetchSections } from '../util/api.js';
+import { addSection, deleteTodo, fetchAllData } from '../util/api.js';
 
 export default function Modal({ $target, setAppState }) {
   const $background = document.createElement('div');
@@ -40,18 +40,22 @@ export default function Modal({ $target, setAppState }) {
     $deleteBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const { type, title, cardId } = this.state;
-      let newSections = await fetchSections();
 
       switch (type) {
         case 'input':
-          newSections = await addSection(title);
+          await addSection(title);
+          this.setState({
+            type: null,
+            title: '',
+            cardId: null,
+          });
           break;
         case 'prompt':
-          newSections = await deleteTodo(cardId);
+          await deleteTodo(cardId);
           break;
       }
-
-      setAppState(newSections);
+      let newData = await fetchAllData();
+      setAppState(newData);
       $background.classList.toggle('block');
     });
   };

@@ -3,7 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
-const { data } = JSON.parse(fs.readFileSync('./server/todos.json', 'utf8'));
+const all = JSON.parse(fs.readFileSync('./server/todos.json', 'utf8'));
+const { user, data, log } = all;
 
 app.use(
   cors({
@@ -17,6 +18,10 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
+});
+
+app.get('/all', (req, res) => {
+  res.send(all);
 });
 
 app.get('/sections', (req, res) => {
@@ -41,6 +46,13 @@ app.post('/section', (req, res) => {
   };
   data.push(newSection);
 
+  log.push({
+    action: '추가',
+    from: null,
+    to: title,
+    task: 'section',
+  });
+
   res.send(data);
 });
 
@@ -52,7 +64,15 @@ app.delete('/section/:id', (req, res) => {
   if (deleteIdx === -1)
     return res.status(404).send(`존재하지 않는 섹션 id = ${deleteIdx}입니다 `);
 
-  data.splice(deleteIdx, 1);
+  const deletedSection = data.splice(deleteIdx, 1);
+
+  log.push({
+    action: '삭제',
+    from: null,
+    to: deletedSection.title,
+    task: 'section',
+  });
+
   res.send(data);
 });
 
@@ -64,7 +84,15 @@ app.patch('/section/:id', (req, res) => {
   if (findIdx === -1)
     return res.status(404).send(`존재하지 않는 섹션 id = ${id}입니다 `);
 
+  log.push({
+    action: '수정',
+    from: data[findIdx].sectionName,
+    to: title,
+    task: 'section',
+  });
+
   data[findIdx].sectionName = title;
+
   res.send(data);
 });
 
@@ -107,18 +135,27 @@ app.post('/section/:id/todo', (req, res) => {
 app.delete('/todos/:id', (req, res) => {
   const { id } = req.params;
 
-  let findIdx;
+  let findIdx, deletedTodo;
   data.forEach(({ todos }) => {
     todos.forEach((todo, idx) => {
       if (todo.id === parseInt(id)) {
         findIdx = idx;
-        todos.splice(findIdx, 1);
+        deletedTodo = todos.splice(findIdx, 1);
       }
     });
   });
 
   if (findIdx === undefined)
     res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
+
+  if (!([deletedTodo].type === 'new')) {
+    log.push({
+      action: '삭제',
+      from: data[findIdx].sectionName,
+      to: [deletedTodo].title,
+      task: 'todo',
+    });
+  }
 
   res.send(data);
 });
@@ -128,11 +165,13 @@ app.patch('/todos/:id', (req, res) => {
   const { id } = req.params;
   const { title, content, type } = req.body;
 
-  let findIdx;
+  let findIdx, prevTitle, prevType;
   data.forEach(({ todos }) => {
     todos.forEach((todo, idx) => {
       if (todo.id === parseInt(id)) {
         findIdx = idx;
+        prevTitle = todos[findIdx].title;
+        prevType = todos[findIdx].type;
         todos[findIdx] = {
           ...todos[findIdx],
           title,
@@ -146,7 +185,26 @@ app.patch('/todos/:id', (req, res) => {
   if (findIdx === undefined)
     res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
 
+  if (prevType === 'new') {
+    log.push({
+      action: '추가',
+      from: null,
+      to: title,
+      task: 'todo',
+    });
+  } else {
+    log.push({
+      action: '수정',
+      from: prevTitle,
+      to: title,
+      task: 'todo',
+    });
+  }
   res.send(data);
+});
+
+app.get('/log', (req, res) => {
+  res.send(log);
 });
 
 app.get('*', (req, res) => {

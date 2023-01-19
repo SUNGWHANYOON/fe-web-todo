@@ -1,5 +1,16 @@
 const API_BASE_URL = 'http://localhost:8080';
 
+export const fetchAllData = async () => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/all`);
+    if (res.status === 200) {
+      return await res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const fetchSections = async () => {
   try {
     const res = await fetch(`${API_BASE_URL}/sections`);

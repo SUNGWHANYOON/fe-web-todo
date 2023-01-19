@@ -4,15 +4,18 @@ import {
   columnArray,
   cardArray,
   logArray,
-} from "./dataStorage.js";
-import { innerCircleCount } from "./utils/utils.js";
+} from "../dataStorage.js";
+import { innerCircleCount } from "../utils/utils.js";
+
 import {
-  fetchPost,
-  fetchDelete,
-  fetchPut,
-  getJSONData,
-} from "./utils/fetchUtils.js";
-import { makeLog } from "./utils/logutils.js";
+  fixCardDomEventListenerCancel,
+  fixCardDomEventListener,
+  cardDeleteButtonEventListener,
+  cardDeleteButtonCancelEventListener,
+  insertCardDomEventListener,
+  eraseCardXButtonHoverAndEventHandler,
+  fixCardButtonEventHandler,
+} from "./CardViewEvent.js"
 
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
@@ -67,7 +70,10 @@ function insertCardElementText(insertTitleholderText, insertSetClassText) {
 
   return inputText;
 }
-
+function insertCardDomEventListenerCancel(buttonContainer, cardAddButtonFlag) {
+  buttonContainer.remove();
+  cardAddButtonFlag = false;
+}
 function insertCardElementButton(
   insertTitleholderButton,
   insertSetClassButton
@@ -164,103 +170,8 @@ function initCardDeleteModal(currentCard, current_item_id) {
   });
 }
 
-function insertCardDomEventListenerCancel(buttonContainer, cardAddButtonFlag) {
-  buttonContainer.remove();
-  cardAddButtonFlag = false;
-}
-
-function cardDeleteButtonEventListener(
-  cardModalItself,
-  currentCard,
-  current_item_status
-) {
-  cardModalItself.style.display = "none";
-  let name = currentCard.getElementsByClassName("item_name")[0].innerHTML;
-
-  cardArray.getcard().forEach((element,index) => {
-    if (name == element.name) {
-      makeLog("Delete",element.name,element.date,element.storage,"")
-      fetchDelete("card", element.storageId);
-      cardArray.deletecard(index);
-      return;
-    }
-  });
-  //innerCircleCount(getColumnIdxbyCardIdx(idx));
-  currentCard.remove();
-}
-
-function cardDeleteButtonCancelEventListener(cardModalItself) {
-  cardModalItself.style.display = "none";
-}
-
-
-function insertCardDomEventListener(
-    
-  cardIdx,
-  inputtext1,
-  inputtext2,
-  buttonContainer
-) {
-    const current_date = new Date();
-
-    let [columnIdx] = buttonContainer.parentNode.getElementsByClassName('list_name')
-  if (inputtext1.value !== "") {
-    makeLog("Add",inputtext1.value,current_date,columnIdx.innerHTML)
-    fetchPost("card", {
-      name: inputtext1.value,
-      tag: inputtext2.value,
-      status: columnIdx.innerHTML
-    }).then(function () {
-      getJSONData("card").then((data) => {
-        data.forEach((element, index) => {
-          if (index == data.length - 1) {
-            let insertCardDomObject = new cardElement(
-              element.name,
-              element.tag,
-              current_date,
-              element.status,
-              element.id
-            );
-            cardArray.pushcard(insertCardDomObject);
-            addCard(insertCardDomObject);
-          }
-        });
-      });
-    });
-  }
-  cardAddButtonFlag = false;
-  buttonContainer.remove();
-}
-
-function eraseCardXButtonHoverAndEventHandler(
-  eraseCardXButton,
-  currentCard,
-  currentCardTag
-) {
-  eraseCardXButton.addEventListener("mouseover", (event) => {
-    currentCard.setAttribute("class", "card_hover");
-    currentCardTag.setAttribute("class", "card_tag_hover");
-  });
-  eraseCardXButton.addEventListener("mouseout", (event) => {
-    currentCard.setAttribute("class", "card_nothover");
-    currentCardTag.setAttribute("class", "card_tag_nothover");
-  });
-  eraseCardXButton.addEventListener("click", (event) => {
-    currentCard.getElementsByClassName(
-      "card_modal_background"
-    )[0].style.display = "";
-  });
-}
-
-function fixCardButtonEventHandler(fixCardButton, currentCard) {
-  fixCardButton.addEventListener("click", (event) => {
-    const fixCardNode = FixCardElement(currentCard);
-    currentCard.parentNode.appendChild(fixCardNode);
-    currentCard.style.display = "none";
-  });
-}
-
 function FixCardElement(currentCard) {
+  console.log(currentCard)
   let buttonContainer = document.createElement("div");
   buttonContainer.setAttribute("class", "plus_todo");
 
@@ -270,7 +181,7 @@ function FixCardElement(currentCard) {
     "input_title"
   );
   let inputtext2 = insertCardElementText(
-    currentCard.getElementsByClassName("card_tag_nothover")[0].innerHTML,
+    currentCard.getElementsByClassName("item_tag")[0].innerHTML,
     "input_context"
   );
 
@@ -302,51 +213,6 @@ function FixCardElement(currentCard) {
   return buttonContainer;
 }
 
-//수정버튼 -> 취소버튼
-function fixCardDomEventListenerCancel(buttonContainer, currentCard) {
-  currentCard.style.display = "";
-  buttonContainer.remove();
-}
-
-//수정버튼 -> 하늘색 수정버튼
-function fixCardDomEventListener(buttonContainer, currentCard) {
-  let fixCardTitle = buttonContainer.getElementsByClassName("input_title")[0];
-  let fixCardTag = buttonContainer.getElementsByClassName("input_context")[0];
-  let beforeCardName =
-    currentCard.getElementsByClassName("item_name")[0].innerHTML;
-  if (fixCardTitle.value && fixCardTag.value) {
-    let beforeCardIdx = cardArray.findIdxByName(beforeCardName);
-    let beforeCardStatus = cardArray.getcard()[beforeCardIdx].status;
-
-    let bodyData = {
-      name: fixCardTitle.value,
-      tag: fixCardTag.value,
-      status: beforeCardStatus,
-    };
-    let nowDate = new Date();
-    const newStorage = cardArray.getcard()[beforeCardIdx];
-    cardArray.fixcard(
-      beforeCardStatus,
-      new cardElement(
-        fixCardTitle.value,
-        fixCardTag.value,
-        nowDate,
-        beforeCardStatus,
-        newStorage.storageId
-      )
-    );
-    makeLog("update",newStorage.name,newStorage.date,newStorage.status,"")
-    fetchPut("card", newStorage.storageId, bodyData);
-
-    currentCard.getElementsByClassName("item_name")[0].innerHTML =
-      fixCardTitle.value;
-    currentCard.getElementsByClassName("item_tag")[0].value = fixCardTag.value;
-  }
-
-  buttonContainer.remove();
-  currentCard.style.display = "";
-}
-
 function getColumnIdxbyCardIdx(cardIdx) {
   let colIdx = 0;
   columnArray.getColumn().forEach((element, index) => {
@@ -357,5 +223,5 @@ function getColumnIdxbyCardIdx(cardIdx) {
 
   return colIdx;
 }
-export { addCard, insertCardDom, initCardDeleteModal ,getColumnIdxbyCardIdx};
+export { addCard, FixCardElement,insertCardDom, insertCardDomEventListenerCancel,cardAddButtonFlag, initCardDeleteModal ,getColumnIdxbyCardIdx};
 

@@ -1,10 +1,10 @@
 import { initializeSidebar } from "./AnimatedLayer.js";
-import { addCard, initCardDeleteModal, insertCardDom } from "./CardView.js";
+import { addCard, initCardDeleteModal, insertCardDom } from "./card/CardView.js";
 import {
   initializeModal,
   initializeColumn,
   columnAddBlueButton,
-} from "./ColumnView.js";
+} from "./column/ColumnView.js";
 import {
   columnElement,
   cardElement,

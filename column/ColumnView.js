@@ -3,16 +3,16 @@ import {
   cardElement,
   columnArray,
   cardArray,
-} from "./dataStorage.js";
-import { addCard, insertCardDom } from "./CardView.js";
-import { innerCircleCount } from "./utils/utils.js";
+} from "../dataStorage.js";
+import { addCard, insertCardDom } from "../card/CardView.js";
+import { innerCircleCount } from "../utils/utils.js";
 import {
   fetchPost,
   fetchDelete,
   fetchPut,
   getJSONData,
-} from "./utils/fetchUtils.js";
-import { makeLog } from "./utils/logutils.js";
+} from "../utils/fetchUtils.js";
+import { makeLog } from "../utils/logutils.js";
 
 function initializeModal() {
   let modal_input_location = document.getElementById("main");

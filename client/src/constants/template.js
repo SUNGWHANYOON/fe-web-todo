@@ -1,4 +1,4 @@
-export const HedaerTemplate = (title) => {
+export const HedaerTemplate = (log, title) => {
   return `
       ${title}
       <span class="material-symbols-outlined menu">menu</span>
@@ -6,29 +6,40 @@ export const HedaerTemplate = (title) => {
       <div class="notice hide">
         <span class="material-symbols-outlined close"> close </span>
         <div class="notice-cards">
-          <div class="card">
-            <div class="emoji">🥰</div>
-            <div class="content">
-              <div class="middle-text">@sam</div>
-              <div class="big-text">
-                HTML/CSS공부하기를 해야할 일에서 하고 있는 일로 이동하였습니다.
-              </div>
-              <div class="small-text">1분 전</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="emoji">🥰</div>
-            <div class="content">
-              <div class="middle-text">@sam</div>
-              <div class="big-text">
-                HTML/CSS공부하기를 해야할 일에서 하고 있는 일로 이동하였습니다.
-              </div>
-              <div class="small-text">1분 전</div>
-            </div>
-          </div>
+        ${
+          !log.length
+            ? `<div class="notice_text">히스토리가 존재하지 않습니다</div>`
+            : ''
+        }
+        ${log
+          .map(
+            ({ action, from, to, task }) => `
+              <div class="card">
+                <div class="emoji">😁</div>
+                <div class="content">
+                  <div class="middle-text">@euna</div>
+                  <div class="big-text">
+                    ${noticeText(action, from, to, task)} ${action}하였습니다.
+                  </div>
+                  <div class="small-text">1분 전</div>
+                </div>
+              </div>`
+          )
+          .join('')}
         </div>
       </div>
   `;
+};
+
+const noticeText = (action, from, to, task) => {
+  switch (task) {
+    case 'section':
+      if (action === '이동') return `${from}에서 ${to}로`;
+      else return `${to}를`;
+    case 'todo':
+      if (action === '수정') return `${from}에서 ${to}로`;
+      else return `${to}를`;
+  }
 };
 
 export const SectionTemplate = (id, sectionName, todos) => {

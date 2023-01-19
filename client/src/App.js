@@ -4,18 +4,24 @@ import SectionList from './components/SectionList.js';
 import { fetchAllData, fetchSections } from './util/api.js';
 
 export default function App({ $target }) {
-  const fetchData = async () => {
-    const todoData = await fetchAllData();
-    this.setState(todoData);
+  this.state = {
+    user: '',
+    data: [],
+    log: [],
   };
-
-  this.state = [];
 
   this.setState = (nextState) => {
     this.state = nextState;
+
     header.setState(this.state.log);
     sectionList.setState(this.state.data);
   };
+
+  const fetchData = (async () => {
+    const todoData = await fetchAllData();
+    this.setState(todoData);
+  })();
+  //fetchData();
 
   const header = new Header({
     $target,
@@ -25,7 +31,7 @@ export default function App({ $target }) {
 
   const sectionList = new SectionList({
     $target,
-    initialState: this.state,
+    initialState: this.state.data,
     onHandleModal: (type, cardId) => {
       modal.onHandleDisplay(type, cardId);
     },
@@ -37,6 +43,4 @@ export default function App({ $target }) {
       this.setState(todos);
     },
   });
-
-  fetchData();
 }

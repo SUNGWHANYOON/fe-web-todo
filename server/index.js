@@ -46,7 +46,7 @@ app.post('/section', (req, res) => {
   };
   data.push(newSection);
 
-  log.push({
+  log.unshift({
     action: '추가',
     from: null,
     to: title,
@@ -66,10 +66,10 @@ app.delete('/section/:id', (req, res) => {
 
   const deletedSection = data.splice(deleteIdx, 1);
 
-  log.push({
+  log.unshift({
     action: '삭제',
     from: null,
-    to: deletedSection.title,
+    to: deletedSection[0].sectionName,
     task: 'section',
   });
 
@@ -84,7 +84,7 @@ app.patch('/section/:id', (req, res) => {
   if (findIdx === -1)
     return res.status(404).send(`존재하지 않는 섹션 id = ${id}입니다 `);
 
-  log.push({
+  log.unshift({
     action: '수정',
     from: data[findIdx].sectionName,
     to: title,
@@ -121,7 +121,7 @@ app.post('/section/:id/todo', (req, res) => {
   if (findIdx === -1)
     return res.status(404).send(`존재하지 않는 섹션 id = ${findIdx}입니다 `);
 
-  data[findIdx].todos.push({
+  data[findIdx].todos.unshift({
     id: Date.now(),
     title,
     content,
@@ -148,11 +148,11 @@ app.delete('/todos/:id', (req, res) => {
   if (findIdx === undefined)
     res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
 
-  if (!([deletedTodo].type === 'new')) {
-    log.push({
+  if (!(deletedTodo[0].type === 'new')) {
+    log.unshift({
       action: '삭제',
       from: data[findIdx].sectionName,
-      to: [deletedTodo].title,
+      to: deletedTodo[0].title,
       task: 'todo',
     });
   }
@@ -186,14 +186,14 @@ app.patch('/todos/:id', (req, res) => {
     res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
 
   if (prevType === 'new') {
-    log.push({
+    log.unshift({
       action: '추가',
       from: null,
       to: title,
       task: 'todo',
     });
   } else {
-    log.push({
+    log.unshift({
       action: '수정',
       from: prevTitle,
       to: title,

@@ -8,25 +8,29 @@ export default function Header({ $target, initialState, title }) {
 
   this.setState = (nextState) => {
     this.state = nextState;
-    console.log(this.state);
-    // this.render();
+    this.render();
+  };
+
+  const onClickhandler = () => {
+    const notice_ul = document.querySelector('.notice');
+    $header.addEventListener('click', (e) => {
+      const menu_btn = e.target.closest('.menu');
+      const close_btn = e.target.closest('.close');
+
+      if (menu_btn || close_btn) {
+        console.log(notice_ul);
+        notice_ul.classList.toggle('hide');
+      }
+    });
   };
 
   this.render = () => {
     $header.innerHTML = `
-      ${HedaerTemplate(title)}
+      ${HedaerTemplate(this.state, title)}
     `;
+
+    onClickhandler();
   };
 
   this.render();
-
-  const notice_ul = document.querySelector('.notice');
-  $header.addEventListener('click', (e) => {
-    const menu_btn = e.target.closest('.menu');
-    const close_btn = e.target.closest('.close');
-
-    if (menu_btn || close_btn) {
-      notice_ul.classList.toggle('hide');
-    }
-  });
 }

@@ -32,7 +32,6 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
   };
 
   this.onAddTodo = async (sectionId) => {
-    console.log('실행됨');
     const newSections = await addTodo(sectionId, {
       title: '',
       content: '',

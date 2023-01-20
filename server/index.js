@@ -121,7 +121,7 @@ app.post('/section/:id/todo', (req, res) => {
   if (findIdx === -1)
     return res.status(404).send(`존재하지 않는 섹션 id = ${findIdx}입니다 `);
 
-  data[findIdx].todos.unshift({
+  data[findIdx].todos.push({
     id: Date.now(),
     title,
     content,

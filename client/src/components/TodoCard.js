@@ -153,6 +153,9 @@ export default function TodoCard(
         $newCard.style.top = pageY - shiftY + 'px';
       }
 
+      let currentDroppable = document.querySelector('article');
+      let droppableBelow = document.querySelectorAll('.droppable')[1];
+
       function onMouseMove(e) {
         moveAt(e.pageX, e.pageY);
         $newCard.hidden = true;

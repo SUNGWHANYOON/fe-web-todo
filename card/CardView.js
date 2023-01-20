@@ -30,10 +30,10 @@ function addCard(element) {
 
   let currentCardIdx = cardArray.findIdxByName(element.name); //list 배열의 번호
   let card = makeCardElement(currentCardIdx, inputCardArray);
-  let eraseCardXButton = card.getElementsByClassName("button_x_card")[0];
+  let [eraseCardXButton] = card.getElementsByClassName("button_x_card");
   let currentCard = eraseCardXButton.parentNode.parentNode.parentNode;
-  let currentCardTag = currentCard.getElementsByClassName("item_tag")[0];
-  let fixCardButton = card.getElementsByClassName("card_fix")[0];
+  let [currentCardTag] = currentCard.getElementsByClassName("item_tag");
+  let [fixCardButton] = card.getElementsByClassName("card_fix");
 
   fixCardButtonEventHandler(fixCardButton, currentCard);
   eraseCardXButtonHoverAndEventHandler(
@@ -48,7 +48,7 @@ function addCard(element) {
 function makeCardElement(currentCardIdx, inputCardArray) {
   let initialize_location = document.getElementsByClassName("cardLayout"); //list 배열
   let card = document.createElement("div");
-  let templates = document.getElementsByClassName("template_item")[0];
+  let [templates] = document.getElementsByClassName("template_item");
   let input_name = inputCardArray.name;
   let input_tag = inputCardArray.tag;
   let input_thing = document.importNode(templates.content, true);
@@ -153,10 +153,10 @@ function initCardDeleteModal(currentCard, current_item_id) {
   )[0];
   cardModalItself.style.display = "none";
 
-  let cardDeleteButtonCancel =
-    cardModalItself.getElementsByClassName("card_keep")[0];
-  let cardDeleteButton =
-    cardModalItself.getElementsByClassName("card_delete")[0];
+  let [cardDeleteButtonCancel] =
+    cardModalItself.getElementsByClassName("card_keep");
+  let [cardDeleteButton] =
+    cardModalItself.getElementsByClassName("card_delete");
 
   cardDeleteButton.addEventListener("click", function () {
     cardDeleteButtonEventListener(
@@ -171,7 +171,6 @@ function initCardDeleteModal(currentCard, current_item_id) {
 }
 
 function FixCardElement(currentCard) {
-  console.log(currentCard)
   let buttonContainer = document.createElement("div");
   buttonContainer.setAttribute("class", "plus_todo");
 

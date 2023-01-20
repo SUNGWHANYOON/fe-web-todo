@@ -16,7 +16,7 @@ import { makeLog } from "../utils/logutils.js";
 
 function initializeModal() {
   let modal_input_location = document.getElementById("main");
-  let modal_templates = document.getElementsByClassName("todo_plus_modal")[0];
+  let [modal_templates] = document.getElementsByClassName("todo_plus_modal");
   let input_modal = document.importNode(modal_templates.content, true);
   modal_input_location.appendChild(input_modal);
 
@@ -32,7 +32,7 @@ function initializeColumn(i) {
   columnUnit.appendChild(cardLayout);
 
   let columnInputName = columnArray.getColumn()[i].name;
-  let columnNameLocation = columnUnit.getElementsByClassName("list_name")[0];
+  let [columnNameLocation] = columnUnit.getElementsByClassName("list_name");
   changeColumnNameEventHandler(columnNameLocation, i, columnInputName);
   mainLocation.appendChild(columnUnit);
   document.getElementsByClassName("list_name")[i].innerHTML = columnInputName;
@@ -97,7 +97,7 @@ function onload_function() {
 function changeColumnNameEventHandler(columnNameLocation, i, input_name) {
   columnNameLocation.addEventListener("dblclick", function (event) {
     if (columnNameLocation.value != input_name) {
-      columnArray.arr[i].setName(columnNameLocation.value);
+      columnArray.getColumn()[i].setName(columnNameLocation.value);
       fetchPut("column", i + 1, {
         name: columnNameLocation.value,
       });

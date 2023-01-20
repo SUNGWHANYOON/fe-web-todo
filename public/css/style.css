@@ -316,7 +316,7 @@ body{
 }
 .sidebarOn{
     position : absolute;
-    display : "" !important;
+    display : "";
     height : 100%;
     width : 17%;
     left : 100%;

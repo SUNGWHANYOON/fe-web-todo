@@ -22,8 +22,8 @@ function fixCardDomEventListenerCancel(buttonContainer, currentCard) {
 
 //수정버튼 -> 하늘색 수정버튼
 function fixCardDomEventListener(buttonContainer, currentCard) {
-  let fixCardTitle = buttonContainer.getElementsByClassName("input_title")[0];
-  let fixCardTag = buttonContainer.getElementsByClassName("input_context")[0];
+  let [fixCardTitle] = buttonContainer.getElementsByClassName("input_title");
+  let [fixCardTag] = buttonContainer.getElementsByClassName("input_context");
   let beforeCardName =
     currentCard.getElementsByClassName("item_name")[0].innerHTML;
   if (fixCardTitle.value && fixCardTag.value) {
@@ -71,7 +71,7 @@ function cardDeleteButtonEventListener(
 
   cardArray.getcard().forEach((element, index) => {
     if (name == element.name) {
-      makeLog("Delete", element.name, element.date, element.storage, "");
+      makeLog("delete", element.name, element.date, element.storage, "");
       fetchDelete("card", element.storageId);
       cardArray.deletecard(index);
       return;
@@ -96,7 +96,7 @@ function insertCardDomEventListener(
   let [columnIdx] =
     buttonContainer.parentNode.getElementsByClassName("list_name");
   if (inputtext1.value !== "") {
-    makeLog("Add", inputtext1.value, current_date, columnIdx.innerHTML);
+    makeLog("add", inputtext1.value, current_date, columnIdx.innerHTML);
     fetchPost("card", {
       name: inputtext1.value,
       tag: inputtext2.value,

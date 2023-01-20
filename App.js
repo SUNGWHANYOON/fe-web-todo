@@ -1,4 +1,4 @@
-import { initializeSidebar } from "./AnimatedLayer.js";
+import { initializeSidebar } from "./Sidebar/AnimatedLayer.js";
 import { addCard, initCardDeleteModal, insertCardDom } from "./card/CardView.js";
 import {
   initializeModal,

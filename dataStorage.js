@@ -97,14 +97,14 @@ cardStorage.prototype.returnStorageIdByName = function (name) {
 // 로그 그 자체, 로그 배열을 이루는 기본요소, 로그 정보가 들어있다.
 
 const logElement = function (
-  functionNumber,
+  functionName,
   cardName,
   logDate,
   cardFrom,
   cardTo,
   storageId
 ) {
-  this.functionNumber = functionNumber;
+  this.functionName = functionName;
   this.cardName = cardName;
   this.logDate = logDate;
   this.cardFrom = cardFrom;
@@ -114,7 +114,7 @@ const logElement = function (
 
 logElement.prototype.getLog = function () {
   return [
-    this.functionNumber,
+    this.functionName,
     this.cardName,
     this.logDate,
     this.cardFrom,
@@ -155,7 +155,7 @@ logStorage.prototype.fixLogArray = function (i, logElement) {
 };
 
 logStorage.prototype.testArray = function(){
-    console.log(this.arr)
+  console.log(this.arr)
 }
 
 // 현재 시각

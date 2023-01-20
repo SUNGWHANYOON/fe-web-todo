@@ -41,3 +41,4 @@ async function getJSONData(storage) {
 }
 
 export { fetchPost, fetchDelete, fetchPut, getJSONData };
+

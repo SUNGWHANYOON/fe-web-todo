@@ -53,7 +53,7 @@ app.post('/section', (req, res) => {
     task: 'section',
   });
 
-  res.send(data);
+  res.send(all);
 });
 
 // DELETE : section 삭제하기
@@ -73,7 +73,7 @@ app.delete('/section/:id', (req, res) => {
     task: 'section',
   });
 
-  res.send(data);
+  res.send(all);
 });
 
 // PATCH : 해당 섹션의 제목 수정하기
@@ -93,7 +93,7 @@ app.patch('/section/:id', (req, res) => {
 
   data[findIdx].sectionName = title;
 
-  res.send(data);
+  res.send(all);
 });
 
 // GET : 해당 id값을 가진 todo 출력
@@ -128,7 +128,7 @@ app.post('/section/:id/todo', (req, res) => {
     type: 'new',
   });
 
-  res.send(data);
+  res.send(all);
 });
 
 // DELETE : 해당 todo id값을 가진 todo를 삭제
@@ -157,7 +157,7 @@ app.delete('/todos/:id', (req, res) => {
     });
   }
 
-  res.send(data);
+  res.send(all);
 });
 
 // PATCH : 해당 todo id값을 가진 todo수정
@@ -200,7 +200,34 @@ app.patch('/todos/:id', (req, res) => {
       task: 'todo',
     });
   }
-  res.send(data);
+  res.send(all);
+});
+
+app.patch('/todos/move/:id', (req, res) => {
+  const { id } = req.params;
+  const { cardId, down } = req.body;
+
+  let findTodo;
+  data.forEach(({ todos }) => {
+    todos.forEach((todo, idx) => {
+      if (todo.id === parseInt(id)) {
+        findTodo = todo;
+        deletedTodo = todos.splice(idx, 1);
+      }
+    });
+  });
+
+  if (!findTodo) res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
+
+  data.forEach(({ todos }, idx1) => {
+    todos.forEach((todo, idx2) => {
+      if (todo.id === parseInt(cardId)) {
+        todos.splice(idx2 + down, 0, findTodo);
+      }
+    });
+  });
+
+  res.send(all);
 });
 
 app.get('/log', (req, res) => {

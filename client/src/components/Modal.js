@@ -1,7 +1,8 @@
 import { ModalTemplate } from '../constants/template.js';
+import { store } from '../store/index.js';
 import { addSection, deleteTodo, fetchAllData } from '../util/api.js';
 
-export default function Modal({ $target, setAppState }) {
+export default function Modal({ $target }) {
   const $background = document.createElement('div');
   $background.classList.add('modal-background');
 
@@ -43,7 +44,7 @@ export default function Modal({ $target, setAppState }) {
 
       switch (type) {
         case 'input':
-          await addSection(title);
+          store.dispach({ type: 'ADD_SECTION', title });
           this.setState({
             type: null,
             title: '',
@@ -51,11 +52,9 @@ export default function Modal({ $target, setAppState }) {
           });
           break;
         case 'prompt':
-          await deleteTodo(cardId);
+          store.dispach({ type: 'DEL_TODO', cardId });
           break;
       }
-      let newData = await fetchAllData();
-      setAppState(newData);
       $background.classList.toggle('block');
     });
   };

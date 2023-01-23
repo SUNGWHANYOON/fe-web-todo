@@ -1,6 +1,7 @@
 import { alterTodo } from '../util/api.js';
 import { SectionTemplate } from '../constants/template.js';
 import TodoCard from './TodoCard.js';
+import { store } from '../store/index.js';
 
 export default function Section(
   $target,
@@ -58,7 +59,8 @@ export default function Section(
       }
 
       if (deleteSectionBtn) {
-        onDeleteSection(sectionId);
+        store.dispach({ type: 'DEL_SECTION', sectionId });
+        //onDeleteSection(sectionId);
         return;
       }
     });

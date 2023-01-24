@@ -4,6 +4,7 @@ import {
   addSection,
   addTodo,
   deleteTodo,
+  alterTodo,
 } from '../util/api.js';
 
 let InitState = null;
@@ -53,6 +54,14 @@ async function reducer(state = InitState, action) {
       return addSection(action.title);
     case 'DEL_TODO':
       return deleteTodo(action.cardId);
+    case 'ADD_TODO':
+      return addTodo(action.sectionId);
+    case 'ALT_TODO':
+      return alterTodo(action.cardId, {
+        title: action.title,
+        content: action.content,
+      });
+
     default:
       return { ...state };
   }

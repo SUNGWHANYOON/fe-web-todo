@@ -1,12 +1,10 @@
 import Modal from './components/Modal.js';
 import Header from './components/Header.js';
 import SectionList from './components/SectionList.js';
-import { fetchAllData, fetchSections } from './util/api.js';
 import { store } from './store/index.js';
 
 export default function App({ $target }) {
   store.subscribe(() => {
-    console.log('상태 업데이트시 실행됩ㄴ다');
     this.setState(store.getState());
   });
   store.dispach({ type: 'GET_DATA' });

@@ -1,16 +1,8 @@
-import { alterTodo } from '../util/api.js';
 import { SectionTemplate } from '../constants/template.js';
 import TodoCard from './TodoCard.js';
 import { store } from '../store/index.js';
 
-export default function Section(
-  $target,
-  initialState,
-  onDeleteSection,
-  onAddtodo,
-  onHandleModal,
-  idx
-) {
+export default function Section($target, initialState, onHandleModal) {
   const $section = document.createElement('section');
   $target.appendChild($section);
 
@@ -23,8 +15,12 @@ export default function Section(
 
   // 하위 컴포넌트에게 넘겨줄 함수
   this.onAlterTodo = async (id, { title, content }) => {
-    const newSections = await alterTodo(parseInt(id), { title, content });
-    this.setState(newSections[idx]);
+    store.dispach({
+      type: 'ALT_TODO',
+      cardId: id,
+      title,
+      content,
+    });
   };
 
   // 하위 컴포넌트에게 넘겨줄 함수
@@ -54,13 +50,12 @@ export default function Section(
       if ($sectionHeader) sectionId = parseInt($sectionHeader.dataset.id);
 
       if (addTodoBtn) {
-        onAddtodo(sectionId);
+        store.dispach({ type: 'ADD_TODO', sectionId });
         return;
       }
 
       if (deleteSectionBtn) {
         store.dispach({ type: 'DEL_SECTION', sectionId });
-        //onDeleteSection(sectionId);
         return;
       }
     });

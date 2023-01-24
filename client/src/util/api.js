@@ -76,7 +76,7 @@ export const fetchTodo = async (id) => {
   }
 };
 
-export const addTodo = async (id, { title = '', content = '' }) => {
+export const addTodo = async (id) => {
   try {
     const res = await fetch(`${API_BASE_URL}/section/${id}/todo`, {
       method: 'POST',
@@ -84,8 +84,8 @@ export const addTodo = async (id, { title = '', content = '' }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title,
-        content,
+        title: '',
+        content: '',
         type: 'new',
       }),
     });

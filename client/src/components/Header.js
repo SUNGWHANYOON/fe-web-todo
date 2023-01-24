@@ -18,7 +18,6 @@ export default function Header({ $target, initialState, title }) {
       const close_btn = e.target.closest('.close');
 
       if (menu_btn || close_btn) {
-        console.log(notice_ul);
         notice_ul.classList.toggle('hide');
       }
     });

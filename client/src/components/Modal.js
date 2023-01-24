@@ -1,6 +1,5 @@
 import { ModalTemplate } from '../constants/template.js';
 import { store } from '../store/index.js';
-import { addSection, deleteTodo, fetchAllData } from '../util/api.js';
 
 export default function Modal({ $target }) {
   const $background = document.createElement('div');

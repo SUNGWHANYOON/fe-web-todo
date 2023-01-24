@@ -1,4 +1,3 @@
-import { addTodo, deleteSection } from '../util/api.js';
 import AddButton from './AddButton.js';
 import Section from './Section.js';
 
@@ -14,30 +13,9 @@ export default function SectionList({ $target, initialState, onHandleModal }) {
 
   this.makeSection = (element) => {
     const $main = element;
-    this.state.map((sectionData, idx) => {
-      new Section(
-        $main,
-        sectionData,
-        this.onDeleteSection,
-        this.onAddTodo,
-        onHandleModal,
-        idx
-      );
+    this.state.map((sectionData) => {
+      new Section($main, sectionData, onHandleModal);
     });
-  };
-
-  this.onDeleteSection = async (sectionId) => {
-    const newSections = await deleteSection(sectionId);
-    this.setState(newSections);
-  };
-
-  this.onAddTodo = async (sectionId) => {
-    const newSections = await addTodo(sectionId, {
-      title: '',
-      content: '',
-      type: 'new',
-    });
-    this.setState(newSections);
   };
 
   this.render = () => {

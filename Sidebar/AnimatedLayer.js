@@ -37,7 +37,6 @@ function addSidebar(){
 
     })
 
-    insertHistory() //맨처음 시작할때 부분
 }
 
 

@@ -10,13 +10,16 @@ import {
   cardElement,
   columnArray,
   cardArray,
+  logElement,
+  logArray,
 } from "./dataStorage.js";
 import { fetchDelete, getJSONData } from "./utils/fetchUtils.js";
-import { makeLog } from "./utils/logutils.js";
+import { insertHistory, makeLog } from "./utils/logutils.js";
 
 function main() {
   initializeModal();
   loadingData();
+  loadingLog();
 }
 main();
 
@@ -53,6 +56,16 @@ function loadingData() {
     columnAddBlueButton();
     columnPlusAndDelete();
   });
+}
+
+function loadingLog(){
+  getJSONData("log").then((data)=>{
+    data.forEach((element)=>{
+    const newLog = new logElement(element.functionName,element.cardName, element.logDate, element.cardFrom, element.cardTo, element.storageId);
+    logArray.pushLogArray(newLog);
+    insertHistory(newLog)
+    })
+  })
 }
 
 function columnPlusAndDelete() {

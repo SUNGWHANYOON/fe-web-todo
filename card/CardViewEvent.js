@@ -48,6 +48,14 @@ function fixCardDomEventListener(buttonContainer, currentCard) {
       )
     );
     makeLog("update", newStorage.name, newStorage.date, newStorage.status, "");
+    
+    fetchPost("log",{
+      functionName : "update",
+      cardName : fixCardTitle.value,
+      logDate : nowDate,
+      cardFrom : beforeCardStatus
+    })
+    
     fetchPut("card", newStorage.storageId, bodyData)
     .then(function(){
 
@@ -68,9 +76,14 @@ function cardDeleteButtonEventListener(
 ) {
   cardModalItself.style.display = "none";
   let name = currentCard.getElementsByClassName("item_name")[0].innerHTML;
-
   cardArray.getcard().forEach((element, index) => {
     if (name == element.name) {
+      fetchPost("log",{
+        functionName : "delete",
+        cardName : element.name,
+        logDate : new Date(),
+        cardFrom : element.status
+      })
       makeLog("delete", element.name, element.date, element.storage, "");
       fetchDelete("card", element.storageId);
       cardArray.deletecard(index);
@@ -96,7 +109,15 @@ function insertCardDomEventListener(
   let [columnIdx] =
     buttonContainer.parentNode.getElementsByClassName("list_name");
   if (inputtext1.value !== "") {
-    makeLog("add", inputtext1.value, current_date, columnIdx.innerHTML);
+    makeLog("add", inputtext1.value, current_date, columnIdx.innerHTML,"","");
+    
+    fetchPost("log",{
+      functionName : "add",
+      cardName : inputtext1.value,
+      logDate : current_date,
+      cardFrom : columnIdx.innerHTML,
+    })
+
     fetchPost("card", {
       name: inputtext1.value,
       tag: inputtext2.value,

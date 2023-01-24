@@ -1,4 +1,5 @@
 import { TodoCardTemplate } from '../constants/template.js';
+import { store } from '../store/index.js';
 import { getClosest } from '../util/dom.js';
 
 export default function TodoCard(
@@ -161,6 +162,7 @@ export default function TodoCard(
           }
 
           let $droppableBelow = null;
+          let $droppableCard = null;
 
           function onMouseMove(e) {
             moveAt(e.pageX, e.pageY);
@@ -169,24 +171,43 @@ export default function TodoCard(
             $newCard.style.display = 'flex';
             if (!elemBelow) return;
             $droppableBelow = elemBelow.closest('.droppable');
+            $droppableCard = elemBelow.closest('form');
           }
 
           function onMouseUp(e) {
             console.log('마우스 업!');
+            const fromId = $card.dataset.id;
+            let sectionId = null;
+            let cardId = null;
 
-            document.removeEventListener('mousemove', onMouseMove);
+            if ($droppableCard && $droppableBelow) {
+              cardId = $droppableCard.dataset.id;
+              sectionId = $droppableBelow.dataset.id;
 
-            if ($droppableBelow && $currentColunm) {
-              $droppableBelow.appendChild($newCard);
-              $newCard.style.position = 'static';
-              console.log($currentColunm);
+              store.dispach({
+                type: 'MOV_TODO',
+                fromId: fromId,
+                toId: cardId,
+                sectionId,
+              });
+              document.body.removeChild($newCard);
               $currentColunm.removeChild($card);
-              $newCard.classList.remove('card-dragging');
+            } else if ($droppableBelow) {
+              sectionId = $droppableBelow.dataset.id;
+              store.dispach({
+                type: 'MOV_TODO',
+                fromId: fromId,
+                toId: null,
+                sectionId,
+              });
+              document.body.removeChild($newCard);
+              $currentColunm.removeChild($card);
             } else {
               document.body.removeChild($newCard);
               $card.classList.remove('card-dragged');
             }
 
+            document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
           }
 

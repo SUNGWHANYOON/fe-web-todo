@@ -54,7 +54,7 @@ export const SectionTemplate = (id, sectionName, todos) => {
           <span class="button-delete material-symbols-outlined"> close </span>
         </div>
     </header>
-    <article class="article${id} droppable">
+    <article class="article${id} droppable" data-id=${id}>
     </article>
   `;
 };

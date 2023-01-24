@@ -130,3 +130,23 @@ export const alterTodo = async (id, { title, content, type }) => {
     console.error(error);
   }
 };
+
+export const moveTodo = async (fromId, toId, sectionId) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/todos/move/${fromId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cardId: toId,
+        sectionId,
+      }),
+    });
+    if (res.status === 200) {
+      return res.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

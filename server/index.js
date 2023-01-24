@@ -205,7 +205,7 @@ app.patch('/todos/:id', (req, res) => {
 
 app.patch('/todos/move/:id', (req, res) => {
   const { id } = req.params;
-  const { cardId, down } = req.body;
+  const { cardId, sectionId } = req.body;
 
   let findTodo;
   data.forEach(({ todos }) => {
@@ -219,13 +219,21 @@ app.patch('/todos/move/:id', (req, res) => {
 
   if (!findTodo) res.status(404).send(`존재하지 않는 todo id = ${id}입니다`);
 
-  data.forEach(({ todos }, idx1) => {
-    todos.forEach((todo, idx2) => {
-      if (todo.id === parseInt(cardId)) {
-        todos.splice(idx2 + down, 0, findTodo);
+  if (cardId === null) {
+    data.forEach(({ id }, idx) => {
+      if (id === parseInt(sectionId)) {
+        data[idx].todos.unshift(findTodo);
       }
     });
-  });
+  } else {
+    data.forEach(({ todos }) => {
+      todos.forEach((todo, idx) => {
+        if (todo.id === parseInt(cardId)) {
+          todos.splice(idx, 0, findTodo);
+        }
+      });
+    });
+  }
 
   res.send(all);
 });

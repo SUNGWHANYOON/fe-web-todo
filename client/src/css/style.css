@@ -137,6 +137,7 @@ article {
   overflow-y: scroll;
   max-height: calc(100vh - 250px);
   padding-bottom: 80px;
+  min-height: calc(100vh - 250px);
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

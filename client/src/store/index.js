@@ -5,6 +5,7 @@ import {
   addTodo,
   deleteTodo,
   alterTodo,
+  moveTodo,
 } from '../util/api.js';
 
 let InitState = null;
@@ -61,7 +62,9 @@ async function reducer(state = InitState, action) {
         title: action.title,
         content: action.content,
       });
-
+    case 'MOV_TODO':
+      const { fromId, toId, sectionId } = action;
+      return moveTodo(fromId, toId, sectionId);
     default:
       return { ...state };
   }

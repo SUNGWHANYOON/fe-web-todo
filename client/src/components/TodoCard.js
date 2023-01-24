@@ -1,4 +1,5 @@
 import { TodoCardTemplate } from '../constants/template.js';
+import { getClosest } from '../util/dom.js';
 
 export default function TodoCard(
   $target,
@@ -7,11 +8,6 @@ export default function TodoCard(
   onDeleteTodo
 ) {
   const $card = document.createElement('form');
-  const cardId = initialState.id;
-
-  $card.classList.add(`card`, `card${cardId}`);
-  $card.dataset.id = `${cardId}`;
-
   $target.insertAdjacentElement('afterbegin', $card);
 
   this.state = initialState;
@@ -28,14 +24,15 @@ export default function TodoCard(
   this.onClickHandler = (type) => {
     $card.addEventListener('click', (e) => {
       e.preventDefault();
+      const { target } = e;
       let cardId;
 
-      const submitTodoBtn = e.target.closest('.enroll');
-      const alterTodoBtn = e.target.closest('.card-button-edit');
-      const deleteTodoBtn = e.target.closest('.card-button-delete');
-      const cancelTodoBtn = e.target.closest('.cancel');
+      const submitTodoBtn = getClosest(target, '.enroll');
+      const alterTodoBtn = getClosest(target, '.card-button-edit');
+      const deleteTodoBtn = getClosest(target, '.card-button-delete');
+      const cancelTodoBtn = getClosest(target, '.cancel');
 
-      const $cardForm = e.target.closest('.card');
+      const $cardForm = getClosest(target, '.card');
 
       if ($cardForm) cardId = parseInt($cardForm.dataset.id);
 
@@ -73,7 +70,6 @@ export default function TodoCard(
 
   this.onChangeHandler = () => {
     $card.addEventListener('keyup', (e) => {
-      console.log('키입력');
       this.onhandleResizeHeight();
       const { target } = e;
       const name = target.getAttribute('name');
@@ -214,7 +210,11 @@ export default function TodoCard(
   };
 
   this.render = () => {
-    const { title, content, type } = this.state;
+    const { id, title, content, type } = this.state;
+
+    $card.classList.add(`card`, `card${id}`);
+    $card.dataset.id = `${id}`;
+
     $card.innerHTML = `
       ${TodoCardTemplate(title, content)}
     `;

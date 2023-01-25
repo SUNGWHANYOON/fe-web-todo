@@ -183,15 +183,20 @@ export default function TodoCard(
             if ($droppableCard && $droppableBelow) {
               cardId = $droppableCard.dataset.id;
               sectionId = $droppableBelow.dataset.id;
-
-              store.dispach({
-                type: 'MOV_TODO',
-                fromId: fromId,
-                toId: cardId,
-                sectionId,
-              });
-              document.body.removeChild($newCard);
-              $currentColunm.removeChild($card);
+              if(cardId === $newCard.dataset.id){
+                document.body.removeChild($newCard);
+                $card.classList.remove("card-dragged");
+              }
+              else{
+                store.dispach({
+                  type: 'MOV_TODO',
+                  fromId: fromId,
+                  toId: cardId,
+                  sectionId,
+                });
+                document.body.removeChild($newCard);
+                $currentColunm.removeChild($card);
+              }
             } else if ($droppableBelow) {
               sectionId = $droppableBelow.dataset.id;
               store.dispach({

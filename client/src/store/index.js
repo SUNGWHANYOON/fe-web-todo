@@ -6,7 +6,7 @@ import {
   deleteTodo,
   alterTodo,
   moveTodo,
-} from '../util/api.js';
+} from "../util/api.js";
 
 let InitState = null;
 
@@ -18,21 +18,21 @@ async function fetchInitData() {
 fetchInitData();
 
 export const action = {
-  GET_DATA: 'GET_DATA',
-  ADD_SECTION: 'ADD_SECTION',
-  DEL_SECTION: 'DEL_SECTION',
-  ALT_SECTION: 'ALT_SECTION',
-  ADD_TODO: 'ADD_TODO',
-  DEL_TODO: 'DEL_TODO',
-  ALT_TODO: 'ALT_TODO',
-  MOV_TODO: 'MOV_TODO',
+  GET_DATA: "GET_DATA",
+  ADD_SECTION: "ADD_SECTION",
+  DEL_SECTION: "DEL_SECTION",
+  ALT_SECTION: "ALT_SECTION",
+  ADD_TODO: "ADD_TODO",
+  DEL_TODO: "DEL_TODO",
+  ALT_TODO: "ALT_TODO",
+  MOV_TODO: "MOV_TODO",
 };
 
 function createStore(reducer) {
   let state;
   let handler = [];
   return {
-    dispach: async (action) => {
+    dispatch: async (action) => {
       state = await reducer(state, action);
       handler.forEach((callback) => {
         callback();
@@ -47,22 +47,22 @@ function createStore(reducer) {
 
 async function reducer(state = InitState, action) {
   switch (action.type) {
-    case 'GET_DATA':
+    case "GET_DATA":
       return fetchAllData();
-    case 'DEL_SECTION':
+    case "DEL_SECTION":
       return deleteSection(action.sectionId);
-    case 'ADD_SECTION':
+    case "ADD_SECTION":
       return addSection(action.title);
-    case 'DEL_TODO':
+    case "DEL_TODO":
       return deleteTodo(action.cardId);
-    case 'ADD_TODO':
+    case "ADD_TODO":
       return addTodo(action.sectionId);
-    case 'ALT_TODO':
+    case "ALT_TODO":
       return alterTodo(action.cardId, {
         title: action.title,
         content: action.content,
       });
-    case 'MOV_TODO':
+    case "MOV_TODO":
       const { fromId, toId, sectionId } = action;
       return moveTodo(fromId, toId, sectionId);
     default:

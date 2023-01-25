@@ -1,15 +1,15 @@
-import { ModalTemplate } from '../constants/template.js';
-import { store } from '../store/index.js';
+import { ModalTemplate } from "../constants/template.js";
+import { action, store } from "../store/index.js";
 
 export default function Modal({ $target }) {
-  const $background = document.createElement('div');
-  $background.classList.add('modal-background');
+  const $background = document.createElement("div");
+  $background.classList.add("modal-background");
 
   $target.appendChild($background);
 
   this.state = {
     type: null,
-    title: '',
+    title: "",
     cardId: null,
   };
 
@@ -18,7 +18,7 @@ export default function Modal({ $target }) {
   };
 
   this.onChangeHandler = () => {
-    $background.addEventListener('keyup', (e) => {
+    $background.addEventListener("keyup", (e) => {
       const title = e.target.value;
       const nextState = {
         ...this.state,
@@ -29,32 +29,32 @@ export default function Modal({ $target }) {
   };
 
   this.onClickHandler = () => {
-    const $cancelBtn = $background.querySelector('.modal-cancel');
-    const $deleteBtn = $background.querySelector('.modal-delete');
+    const $cancelBtn = $background.querySelector(".modal-cancel");
+    const $deleteBtn = $background.querySelector(".modal-delete");
 
-    $cancelBtn.addEventListener('click', (e) => {
+    $cancelBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      $background.classList.toggle('block');
+      $background.classList.toggle("block");
     });
 
-    $deleteBtn.addEventListener('click', async (e) => {
+    $deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
       const { type, title, cardId } = this.state;
 
       switch (type) {
-        case 'input':
-          store.dispach({ type: 'ADD_SECTION', title });
+        case "input":
+          store.dispatch({ type: action.ADD_SECTION, title });
           this.setState({
             type: null,
-            title: '',
+            title: "",
             cardId: null,
           });
           break;
-        case 'prompt':
-          store.dispach({ type: 'DEL_TODO', cardId });
+        case "prompt":
+          store.dispatch({ type: action.DEL_TODO, cardId });
           break;
       }
-      $background.classList.toggle('block');
+      $background.classList.toggle("block");
     });
   };
 
@@ -69,7 +69,7 @@ export default function Modal({ $target }) {
       this.onClickHandler();
     }
 
-    if (type === 'input') this.onChangeHandler();
+    if (type === "input") this.onChangeHandler();
   };
 
   this.render();
@@ -78,6 +78,6 @@ export default function Modal({ $target }) {
   this.onHandleDisplay = (type, cardId) => {
     this.setState({ ...this.state, type, cardId });
     this.render();
-    $background.classList.toggle('block');
+    $background.classList.toggle("block");
   };
 }

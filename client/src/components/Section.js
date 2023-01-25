@@ -1,9 +1,9 @@
-import { SectionTemplate } from '../constants/template.js';
-import TodoCard from './TodoCard.js';
-import { store } from '../store/index.js';
+import { SectionTemplate } from "../constants/template.js";
+import TodoCard from "./TodoCard.js";
+import { action, store } from "../store/index.js";
 
 export default function Section($target, initialState, onHandleModal) {
-  const $section = document.createElement('section');
+  const $section = document.createElement("section");
   $target.appendChild($section);
 
   this.state = initialState;
@@ -15,8 +15,8 @@ export default function Section($target, initialState, onHandleModal) {
 
   // 하위 컴포넌트에게 넘겨줄 함수
   this.onAlterTodo = async (id, { title, content }) => {
-    store.dispach({
-      type: 'ALT_TODO',
+    store.dispatch({
+      type: action.ALT_TODO,
       cardId: id,
       title,
       content,
@@ -25,7 +25,7 @@ export default function Section($target, initialState, onHandleModal) {
 
   // 하위 컴포넌트에게 넘겨줄 함수
   this.onDeleteTodo = (id) => {
-    onHandleModal('prompt', parseInt(id));
+    onHandleModal("prompt", parseInt(id));
   };
 
   this.makeTodoCard = () => {
@@ -40,22 +40,22 @@ export default function Section($target, initialState, onHandleModal) {
   };
 
   this.onClickHandler = () => {
-    $section.addEventListener('click', (e) => {
+    $section.addEventListener("click", (e) => {
       e.preventDefault();
       let sectionId;
-      const addTodoBtn = e.target.closest('.button-add');
-      const deleteSectionBtn = e.target.closest('.button-delete');
+      const addTodoBtn = e.target.closest(".button-add");
+      const deleteSectionBtn = e.target.closest(".button-delete");
 
-      const $sectionHeader = e.target.closest('.top-box');
+      const $sectionHeader = e.target.closest(".top-box");
       if ($sectionHeader) sectionId = parseInt($sectionHeader.dataset.id);
 
       if (addTodoBtn) {
-        store.dispach({ type: 'ADD_TODO', sectionId });
+        store.dispatch({ type: action.ADD_TODO, sectionId });
         return;
       }
 
       if (deleteSectionBtn) {
-        store.dispach({ type: 'DEL_SECTION', sectionId });
+        store.dispatch({ type: action.DEL_SECTION, sectionId });
         return;
       }
     });

@@ -1,16 +1,16 @@
-import Modal from './components/Modal.js';
-import Header from './components/Header.js';
-import SectionList from './components/SectionList.js';
-import { store } from './store/index.js';
+import Modal from "./components/Modal.js";
+import Header from "./components/Header.js";
+import SectionList from "./components/SectionList.js";
+import { store } from "./store/index.js";
 
 export default function App({ $target }) {
   store.subscribe(() => {
     this.setState(store.getState());
   });
-  store.dispach({ type: 'GET_DATA' });
+  store.dispatch({ type: "GET_DATA" });
 
   this.state = {
-    user: '',
+    user: "",
     data: [],
     log: [],
   };
@@ -25,7 +25,7 @@ export default function App({ $target }) {
   const header = new Header({
     $target,
     initialState: this.state.log,
-    title: 'TO-DO LIST',
+    title: "TO-DO LIST",
   });
 
   const sectionList = new SectionList({

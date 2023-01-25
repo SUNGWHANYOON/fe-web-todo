@@ -1,7 +1,3 @@
-import { getHistoryTemplate } from "./historyTemplate.js";
-import {logArray} from "../dataStorage.js"
-import { insertHistory } from "../utils/logutils.js";
-
 const [body] = document.getElementsByTagName('body')
 
 function initializeSidebar(){
@@ -28,7 +24,7 @@ function sidebarXButtonHandler(sidebarXButton){
 
 function addSidebar(){
     const [icon] = document.getElementsByClassName('hamburger')
-    const [sidebar] = document.getElementsByClassName("sidebarOff");
+    const [sidebar] = document.getElementsByClassName("log_card");
     sidebar.style.display = "none";
 
     icon.addEventListener('click',(_)=>{

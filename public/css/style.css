@@ -345,3 +345,36 @@ body{
 .card_tag_nothover{
     background-color: white;
 }
+.log_card{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 16px;
+
+    width: 332px;
+    height: 137px;
+
+    background: #FFFFFF;
+
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.log_content{
+    width: 244px;
+    height: 46px;
+
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+
+    color: #010101;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}

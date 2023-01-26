@@ -1,7 +1,7 @@
-import { HedaerTemplate } from '../constants/template.js';
+import { HeaderTemplate } from "../constants/template.js";
 
 export default function Header({ $target, initialState, title }) {
-  const $header = document.createElement('header');
+  const $header = document.createElement("header");
   $target.appendChild($header);
 
   this.state = initialState;
@@ -12,20 +12,20 @@ export default function Header({ $target, initialState, title }) {
   };
 
   const onClickhandler = () => {
-    const notice_ul = document.querySelector('.notice');
-    $header.addEventListener('click', (e) => {
-      const menu_btn = e.target.closest('.menu');
-      const close_btn = e.target.closest('.close');
+    const notice_ul = document.querySelector(".notice");
+    $header.addEventListener("click", (e) => {
+      const menu_btn = e.target.closest(".menu");
+      const close_btn = e.target.closest(".close");
 
       if (menu_btn || close_btn) {
-        notice_ul.classList.toggle('hide');
+        notice_ul.classList.toggle("hide");
       }
     });
   };
 
   this.render = () => {
     $header.innerHTML = `
-      ${HedaerTemplate(this.state, title)}
+      ${HeaderTemplate(this.state, title)}
     `;
 
     onClickhandler();

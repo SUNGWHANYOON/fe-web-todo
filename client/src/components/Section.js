@@ -45,9 +45,21 @@ export default function Section($target, initialState, onHandleModal) {
       let sectionId;
       const addTodoBtn = e.target.closest(".button-add");
       const deleteSectionBtn = e.target.closest(".button-delete");
-
+    
       const $sectionHeader = e.target.closest(".top-box");
-      if ($sectionHeader) sectionId = parseInt($sectionHeader.dataset.id);
+      
+      const $sectionTitle = e.target.closest(".text")
+
+      if ($sectionHeader) sectionId = +($sectionHeader.dataset.id);
+
+      if ($sectionTitle) {
+        console.log($sectionTitle.classList)
+        store.dispatch({
+          type: action.ALT_SECTION,
+          sectionId,
+          title: $sectionTitle.innerHTML,
+        });
+      } //하는중
 
       if (addTodoBtn) {
         store.dispatch({ type: action.ADD_TODO, sectionId });

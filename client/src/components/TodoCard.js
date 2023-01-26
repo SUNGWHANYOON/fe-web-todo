@@ -134,7 +134,7 @@ export default function TodoCard(
     $card.addEventListener("mousedown", (e) => {
       isPressed = true;
       timer = setTimeout(() => {
-        holding($card, $currentColumn, timer, isPressed,e);
+        holding($card, $currentColumn, timer, isPressed, e);
       }, DELAY);
 
       document.addEventListener("mouseup", () => {
@@ -145,110 +145,123 @@ export default function TodoCard(
       });
     });
   };
-  function cardDropDispatch(type, fromId, toId, sectionId,$newCard,$card,$currentColumn) {
+  function cardDropDispatch(
+    type,
+    fromId,
+    toId,
+    sectionId,
+    $newCard,
+    $card,
+    $currentColumn
+  ) {
     store.dispatch({
-      type: type,
-      fromId: fromId,
-      toId: toId,
+      type,
+      fromId,
+      toId,
       sectionId,
     });
+
     document.body.removeChild($newCard);
+    console.log($newCard)
     $currentColumn.removeChild($card);
   }
 
-  function cardDropCancel($newCard,$card) {
+  function cardDropCancel($newCard, $card) {
     document.body.removeChild($newCard);
     $card.classList.remove("card-dragged");
   }
 
-
-  function holding($card, $currentColumn, timer, isPressed,e) {
+  function holding($card, $currentColumn, timer, isPressed, e) {
     if (timer) {
       clearTimeout(timer);
     }
 
     if (isPressed) {
-      let shiftX = e.clientX - $card.getBoundingClientRect().left;
-      let shiftY = e.clientY - $card.getBoundingClientRect().top;
+      cardIsPressed($card,$currentColumn, e)
+    }
+  }
 
-      const $newCard = $card.cloneNode(true);
-      $card.classList.add("card-dragged");
+  function cardIsPressed($card, $currentColumn, e) {
+    let shiftX = e.clientX - $card.getBoundingClientRect().left;
+    let shiftY = e.clientY - $card.getBoundingClientRect().top;
 
-      $newCard.classList.add("card-dragging");
-      $newCard.style.position = "absolute";
-      $newCard.style.zIndex = 1000;
+    const $newCard = $card.cloneNode(true);
+    $card.classList.add("card-dragged");
 
-      document.body.append($newCard);
-      moveAt(e.pageX, e.pageY);
+    $newCard.classList.add("card-dragging");
+    $newCard.style.position = "absolute";
+    $newCard.style.zIndex = 1000;
 
-      function moveAt(pageX, pageY) {
-        $newCard.style.left = pageX - shiftX + "px";
-        $newCard.style.top = pageY - shiftY + "px";
-      }
+    document.body.append($newCard);
+    moveAt($newCard, e.pageX, e.pageY, shiftX, shiftY);
 
-      let $droppableBelow = null;
-      let $droppableCard = null;
+    let $droppableBelow = null;
+    let $droppableCard = null;
 
-      function onMouseMove(e) {
-        moveAt(e.pageX, e.pageY);
-        $newCard.style.display = "none";
-        let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-        $newCard.style.display = "flex";
-        if (!elemBelow) return;
-        $droppableBelow = elemBelow.closest(".droppable");
-        $droppableCard = elemBelow.closest("form");
-      }
+    function onMouseMove(e) {
+      moveAt($newCard, e.pageX, e.pageY, shiftX, shiftY);
+      $newCard.style.display = "none";
+      let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+      $newCard.style.display = "flex";
+      if (!elemBelow) return;
+      $droppableBelow = elemBelow.closest(".droppable");
+      $droppableCard = elemBelow.closest("form");
+    }
 
-      function onMouseUp(e) {
-        console.log("마우스 업!");
-        const fromId = $card.dataset.id;
-        let sectionId = null;
-        let cardId = null;
+    function onMouseUp(e) {
+      const fromId = $card.dataset.id;
+      let sectionId = null;
+      let cardId = null;
 
-        if ($droppableCard && $droppableBelow) {
-          cardId = $droppableCard.dataset.id;
-          sectionId = $droppableBelow.dataset.id;
-          if (cardId === $newCard.dataset.id) {
-            cardDropCancel($newCard, $card);
-          } else {
-            cardDropDispatch(
-              action.MOV_TODO,
-              fromId,
-              cardId,
-              sectionId,
-              $newCard,
-              $card,
-              $currentColumn
-            );
-          }
-        } else if ($droppableBelow) {
-          sectionId = $droppableBelow.dataset.id;
+      if ($droppableCard && $droppableBelow) {
+        cardId = $droppableCard.dataset.id;
+        sectionId = $droppableBelow.dataset.id;
+        if (cardId === $newCard.dataset.id) {
+          cardDropCancel($newCard, $card);
+        } else {
           cardDropDispatch(
             action.MOV_TODO,
             fromId,
-            null,
+            cardId,
             sectionId,
             $newCard,
             $card,
             $currentColumn
           );
-        } else {
-          cardDropCancel($newCard, $card);
         }
-
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
+      } else if ($droppableBelow) {
+        sectionId = $droppableBelow.dataset.id;
+        cardDropDispatch(
+          action.MOV_TODO,
+          fromId,
+          null,
+          sectionId,
+          $newCard,
+          $card,
+          $currentColumn
+        );
+      } else {
+        cardDropCancel($newCard, $card);
       }
 
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
-
-      // 기본 드래그 api 해제
-      $newCard.ondragstart = function () {
-        return false;
-      };
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
     }
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+
+    // 기본 드래그 api 해제
+    $newCard.ondragstart = function () {
+      return false;
+    };
   }
+
+  function moveAt($newCard, pageX, pageY, shiftX, shiftY) {
+    $newCard.style.left = pageX - shiftX + "px";
+    $newCard.style.top = pageY - shiftY + "px";
+  }
+
   this.render = () => {
     const { id, title, content, type } = this.state;
 

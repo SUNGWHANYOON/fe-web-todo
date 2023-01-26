@@ -6,6 +6,7 @@ import {
   deleteTodo,
   alterTodo,
   moveTodo,
+  altSection,
 } from "../util/api.js";
 
 let InitState = null;
@@ -65,6 +66,8 @@ async function reducer(state = InitState, action) {
     case "MOV_TODO":
       const { fromId, toId, sectionId } = action;
       return moveTodo(fromId, toId, sectionId);
+    case "ALT_SECTION":
+      return altSection(action.sectionId, action.title );
     default:
       return { ...state };
   }

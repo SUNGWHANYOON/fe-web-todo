@@ -1,4 +1,4 @@
-export const HedaerTemplate = (log, title) => {
+export const HeaderTemplate = (log, title) => {
   return `
       ${title}
       <span class="material-symbols-outlined menu">menu</span>
@@ -9,7 +9,7 @@ export const HedaerTemplate = (log, title) => {
         ${
           !log.length
             ? `<div class="notice_text">히스토리가 존재하지 않습니다</div>`
-            : ''
+            : ""
         }
         ${log
           .map(
@@ -25,7 +25,7 @@ export const HedaerTemplate = (log, title) => {
                 </div>
               </div>`
           )
-          .join('')}
+          .join("")}
         </div>
       </div>
   `;
@@ -33,11 +33,11 @@ export const HedaerTemplate = (log, title) => {
 
 const noticeText = (action, from, to, task) => {
   switch (task) {
-    case 'section':
-      if (action === '이동') return `${from}에서 ${to}로`;
+    case "section":
+      if (action === "이동") return `${from}에서 ${to}로`;
       else return `${to}를`;
-    case 'todo':
-      if (action === '수정') return `${from}에서 ${to}로`;
+    case "todo":
+      if (action === "수정") return `${from}에서 ${to}로`;
       else return `${to}를`;
   }
 };
@@ -97,7 +97,7 @@ export const ModalTemplate = (type) => {
   return `
     <div class="modal">
       ${
-        type === 'prompt'
+        type === "prompt"
           ? `
       <div>선택할 카드를 삭제할까요?</div>
       <div class="card-buttons">
